@@ -88,7 +88,7 @@ export default function App() {
           </tr>
           <tr>
             <td>Percentage of Quran Completed:</td>
-            <td>{parseFloat((totalAayahsRead / 6666) * 100).toFixed(2)}</td>
+            <td>{parseFloat((totalAayahsRead / 6666) * 100).toFixed(2)}%</td>
           </tr>
           <tr>
             <td>Quran Left:</td>
