@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import "./styles.css";
+import { useEffect, useState } from 'react';
+import './styles.css';
 
 export default function App() {
-  const oldData = JSON.parse(localStorage.getItem("oldData"));
+  const oldData = JSON.parse(localStorage.getItem('oldData'));
 
   const [list, setList] = useState([]);
   const [currentSurah, setCurrentSurah] = useState(
@@ -12,11 +12,11 @@ export default function App() {
     oldData ? oldData.currentAayahNo : 0
   );
   const [versesList, setVersesList] = useState([]);
-  const [aayah, setAayah] = useState("");
+  const [aayah, setAayah] = useState('');
   const [totalAayahsRead, setTotalAayahs] = useState(0);
 
   useEffect(() => {
-    fetch("https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json")
+    fetch('https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json')
       .then((response) => response.json())
       .then((data) => {
         setList(data);
@@ -35,11 +35,11 @@ export default function App() {
     if (e !== 0) {
       setVersesList(list[e - 1].verses);
       setCurrentAayahNo(0);
-      setAayah("");
+      setAayah('');
     } else {
       setCurrentSurah(0);
       setVersesList([]);
-      setAayah("");
+      setAayah('');
     }
   };
 
@@ -48,7 +48,7 @@ export default function App() {
     if (e !== 0) {
       setAayah(versesList[e - 1].text);
     } else {
-      setAayah("");
+      setAayah('');
     }
   };
 
@@ -63,9 +63,9 @@ export default function App() {
       currentSurah: currentSurah,
       currentAayahNo: currentAayahNo,
       currentAayah: aayah,
-      percentage: parseFloat((totalAayahsRead / 6666) * 100).toFixed(2)
+      percentage: parseFloat((totalAayahsRead / 6666) * 100).toFixed(2),
     };
-    localStorage.setItem("oldData", JSON.stringify(data));
+    localStorage.setItem('oldData', JSON.stringify(data));
   };
 
   return (
@@ -74,8 +74,8 @@ export default function App() {
       <div>
         <h2>
           {totalAayahsRead > 0
-            ? "Salam! Your progress so far:"
-            : "Salam! Select your last read Surah and aayah and save your progress!"}
+            ? 'Salam! Your progress so far:'
+            : 'Salam! Select your last read Surah and aayah and save your progress!'}
         </h2>
         <table id="progress">
           <tr>
@@ -93,7 +93,7 @@ export default function App() {
           <tr>
             <td>Quran Left:</td>
             <td>
-              {6666 - totalAayahsRead} Aayahs |{"  "}
+              {6666 - totalAayahsRead} Aayahs |{'  '}
               {parseFloat(((6666 - totalAayahsRead) / 6666) * 100).toFixed(2)}%
             </td>
           </tr>
@@ -130,7 +130,7 @@ export default function App() {
           {versesList.map((item, index) => {
             return (
               <option key={index}>
-                {item.text.slice(0, 15)}... {index + 1}
+                {item.text.slice(0, 25)}... {index + 1}
               </option>
             );
           })}
@@ -140,6 +140,15 @@ export default function App() {
       <button className="button" onClick={() => saveData()}>
         Save
       </button>
+
+      <p>
+        <b>Note:</b> Aayahs mentioned here is just for reference, We recommend
+        you to read Quran from a physical book or from an authenticated e-book.
+        Above shown aayahs are fetched from":{' '}
+        <strong>
+          <a href="https://github.com/risan/quran-json">risan/quran-json</a>
+        </strong>
+      </p>
     </div>
   );
 }
