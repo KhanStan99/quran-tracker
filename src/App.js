@@ -1,35 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './styles.css';
+import quran from './assets/quran.json';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, registerables } from 'chart.js';
+ChartJS.register(...registerables);
 
 export default function App() {
   const oldData = JSON.parse(localStorage.getItem('oldData'));
+  const oldGraphData = localStorage.getItem('oldGraphData')
+    ? JSON.parse(localStorage.getItem('oldGraphData'))
+    : [];
+  const oldGraphTimeData = localStorage.getItem('oldGraphTimeData')
+    ? JSON.parse(localStorage.getItem('oldGraphTimeData'))
+    : [];
 
-  const [list, setList] = useState([]);
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart',
+      },
+    },
+  };
+  const data = {
+    labels: oldGraphTimeData,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: oldGraphData,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+  const [list] = useState(quran);
   const [currentSurah, setCurrentSurah] = useState(
     oldData ? oldData.currentSurah : 0
   );
   const [currentAayahNo, setCurrentAayahNo] = useState(
     oldData ? oldData.currentAayahNo : 0
   );
-  const [versesList, setVersesList] = useState([]);
+  const [versesList, setVersesList] = useState(
+    currentSurah ? list[currentSurah - 1].verses : []
+  );
   const [aayah, setAayah] = useState('');
-  const [totalAayahsRead, setTotalAayahs] = useState(0);
+  const [totalAayahsRead, setTotalAayahs] = useState(
+    oldData ? oldData.totalAayahsRead : 0
+  );
   const totalAayaths = 6236;
-
-  useEffect(() => {
-    fetch('https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json')
-      .then((response) => response.json())
-      .then((data) => {
-        setList(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    setVersesList(
-      currentSurah && list.length > 0 ? list[currentSurah - 1].verses : []
-    );
-    setTotalAayahs(oldData ? oldData.totalAayahsRead : 0);
-  }, [list]);
 
   const surahSelected = (e) => {
     setCurrentSurah(e);
@@ -55,8 +78,13 @@ export default function App() {
 
   const saveData = () => {
     let total = 0;
-    for (let i = 0; i < currentSurah; i++) {
-      total = total + list[i].total_verses;
+    if (currentSurah != 0) {
+      for (let i = 0; i < currentSurah; i++) {
+        total = total + list[i].total_verses;
+      }
+      total = total + currentAayahNo;
+    } else {
+      total = currentAayahNo;
     }
     setTotalAayahs(total);
     let data = {
@@ -66,7 +94,21 @@ export default function App() {
       currentAayah: aayah,
       percentage: parseFloat((totalAayahsRead / totalAayaths) * 100).toFixed(2),
     };
+
+    if (oldData) {
+      oldGraphData.push(total - oldData.totalAayahsRead);
+    } else {
+      oldGraphData.push(total);
+    }
+    let d = new Date();
+    let month = d.getMonth() + 1;
+    let formattedDateTime =
+      d.getDate() + '-' + month + ' | ' + d.getHours() + ':' + d.getMinutes();
+    oldGraphTimeData.push(formattedDateTime);
+    localStorage.setItem('oldGraphData', JSON.stringify(oldGraphData));
+    localStorage.setItem('oldGraphTimeData', JSON.stringify(oldGraphTimeData));
     localStorage.setItem('oldData', JSON.stringify(data));
+
     window.location.reload(false);
   };
 
@@ -109,8 +151,16 @@ export default function App() {
                 %
               </td>
             </tr>
+
+            <tr>
+              <td>Last Aayah</td>
+              <td>
+                {currentSurah} : {currentAayahNo}
+              </td>
+            </tr>
           </tbody>
         </table>
+        <Line options={options} data={data} />
         <h2>Surah List</h2>
         <div className="box">
           <select
@@ -149,23 +199,25 @@ export default function App() {
           </select>
         </div>
         <h2>{aayah}</h2>
+        {aayah != '' ? (
+          <p>
+            <b>Note:</b> Aayahs mentioned here is just for reference, We
+            recommend you to read Quran from a physical book or from an
+            authenticated e-book and then save your progress here. Above shown
+            aayahs are fetched from":{' '}
+            <strong>
+              <a href="https://github.com/risan/quran-json" target="_blank">
+                risan/quran-json
+              </a>
+            </strong>
+          </p>
+        ) : null}
         <button className="button" onClick={() => saveData()}>
           Save
         </button>
       </div>
       <footer>
         <p>
-          <b>Note:</b> Aayahs mentioned here is just for reference, We recommend
-          you to read Quran from a physical book or from an authenticated e-book
-          and then save your progress here. Above shown aayahs are fetched
-          from":{' '}
-          <strong>
-            <a href="https://github.com/risan/quran-json" target="_blank">
-              risan/quran-json
-            </a>
-          </strong>
-        </p>
-        <p style={{ color: 'white' }}>
           If you have any feedback, bug report or want to contribute,{' '}
           <a href="mailto:soubankhan3@gmail.com" target="_blank">
             then send me an email
