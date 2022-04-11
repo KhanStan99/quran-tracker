@@ -79,7 +79,7 @@ export default function App() {
   const saveData = () => {
     let total = 0;
     if (currentSurah != 0) {
-      for (let i = 0; i < currentSurah; i++) {
+      for (let i = 0; i <= currentSurah - 2; i++) {
         total = total + list[i].total_verses;
       }
       total = total + currentAayahNo;
@@ -109,7 +109,7 @@ export default function App() {
     localStorage.setItem('oldGraphTimeData', JSON.stringify(oldGraphTimeData));
     localStorage.setItem('oldData', JSON.stringify(data));
 
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   return (
