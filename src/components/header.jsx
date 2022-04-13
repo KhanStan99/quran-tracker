@@ -20,35 +20,28 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = (e) => {
     setAnchorElUser(null);
-    localStorage.clear();
-    window.location.reload(false);
+    if (e === 'Reset Statistics') {
+      localStorage.clear();
+      window.location.reload(false);
+    }
   };
 
   return (
     <AppBar position="static" color="primary">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-            LOGO
-          </Typography>
+        <Toolbar
+          disableGutters
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography variant="h6">Quran Tracker</Typography>
 
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-          >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 0 }}>
+          <Box>
             <Tooltip title="More">
-              <MoreVertIcon onClick={handleOpenUserMenu} sx={{ p: 0 }} />
+              <MoreVertIcon onClick={handleOpenUserMenu} />
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}

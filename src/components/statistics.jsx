@@ -45,7 +45,10 @@ export default function Statistics(props) {
 
   return (
     <div style={{ textAlign: '-webkit-center' }}>
-      <Typography>Salam! Your progress so far</Typography>
+      <Typography style={{ margin: '15px' }}>
+        <strong>Salam!</strong> Your progress so far:
+      </Typography>
+      <Line options={options} data={data} />
       <table className="progress">
         <thead>
           <tr>
@@ -55,7 +58,7 @@ export default function Statistics(props) {
         </thead>
         <tbody>
           <tr>
-            <td>Total Aayahs Read:</td>
+            <td>Total Aayahs Read</td>
             <td>{totalAayahsRead}</td>
           </tr>
           <tr>
@@ -65,7 +68,7 @@ export default function Statistics(props) {
             </td>
           </tr>
           <tr>
-            <td>Quran Left:</td>
+            <td>Quran Left</td>
             <td>
               {totalAayaths - totalAayahsRead} Aayahs |{'  '}
               {parseFloat(
@@ -83,7 +86,24 @@ export default function Statistics(props) {
           </tr>
         </tbody>
       </table>
-      <Line options={options} data={data} />
+      <table className="progress">
+        <thead>
+          <tr>
+            <th>Entry</th>
+            <th>No. of Aayahs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {oldGraphData.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{oldGraphTimeData[index]}</td>
+                <td>{item}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

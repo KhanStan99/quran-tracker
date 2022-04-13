@@ -86,7 +86,7 @@ export default function Tracker(props) {
 
   return (
     <div style={{ textAlign: '-webkit-center' }}>
-      <Typography variant="h6">
+      <Typography variant="h6" style={{ margin: '15px' }}>
         Salam! Select your last read Surah and aayah and save your progress!
       </Typography>
       {currentSurah > 0 || currentAayahNo > 0 ? (
@@ -96,8 +96,8 @@ export default function Tracker(props) {
         </Typography>
       ) : null}
 
-      <Typography variant="h6">Surah List</Typography>
-      <div>
+      <div style={{ marginTop: '15px' }}>
+        <Typography variant="h6">Surah List</Typography>
         <select
           onChange={(event) =>
             surahSelected(event.target.options.selectedIndex)
