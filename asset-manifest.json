@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/quran-tracker-reactjs/static/css/main.a6efba33.chunk.css",
-    "main.js": "/quran-tracker-reactjs/static/js/main.e24a581c.chunk.js",
-    "main.js.map": "/quran-tracker-reactjs/static/js/main.e24a581c.chunk.js.map",
+    "main.css": "/quran-tracker-reactjs/static/css/main.d9a1dce2.chunk.css",
+    "main.js": "/quran-tracker-reactjs/static/js/main.a70c256b.chunk.js",
+    "main.js.map": "/quran-tracker-reactjs/static/js/main.a70c256b.chunk.js.map",
     "runtime-main.js": "/quran-tracker-reactjs/static/js/runtime-main.a46e0b29.js",
     "runtime-main.js.map": "/quran-tracker-reactjs/static/js/runtime-main.a46e0b29.js.map",
-    "static/js/2.7c843707.chunk.js": "/quran-tracker-reactjs/static/js/2.7c843707.chunk.js",
-    "static/js/2.7c843707.chunk.js.map": "/quran-tracker-reactjs/static/js/2.7c843707.chunk.js.map",
+    "static/js/2.0e81ba10.chunk.js": "/quran-tracker-reactjs/static/js/2.0e81ba10.chunk.js",
+    "static/js/2.0e81ba10.chunk.js.map": "/quran-tracker-reactjs/static/js/2.0e81ba10.chunk.js.map",
     "index.html": "/quran-tracker-reactjs/index.html",
-    "static/css/main.a6efba33.chunk.css.map": "/quran-tracker-reactjs/static/css/main.a6efba33.chunk.css.map",
-    "static/js/2.7c843707.chunk.js.LICENSE.txt": "/quran-tracker-reactjs/static/js/2.7c843707.chunk.js.LICENSE.txt"
+    "static/css/main.d9a1dce2.chunk.css.map": "/quran-tracker-reactjs/static/css/main.d9a1dce2.chunk.css.map",
+    "static/js/2.0e81ba10.chunk.js.LICENSE.txt": "/quran-tracker-reactjs/static/js/2.0e81ba10.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a46e0b29.js",
-    "static/js/2.7c843707.chunk.js",
-    "static/css/main.a6efba33.chunk.css",
-    "static/js/main.e24a581c.chunk.js"
+    "static/js/2.0e81ba10.chunk.js",
+    "static/css/main.d9a1dce2.chunk.css",
+    "static/js/main.a70c256b.chunk.js"
   ]
 }
