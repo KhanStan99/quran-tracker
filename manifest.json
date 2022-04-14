@@ -1,0 +1,22 @@
+{
+  "short_name": "Quran Tracker",
+  "name": "Quran Tracker - Track your Quran progress",
+  "description": "App for tracking Quran progress",
+  "icons": [
+    {
+      "src": "./quran_tracker_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./quran_tracker_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "scope": "./index.html",
+  "display": "standalone",
+  "theme_color": "#b4ccff",
+  "background_color": "#b4ccff"
+}
