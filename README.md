@@ -1,6 +1,9 @@
 
 #  Quran Tracker App | ReactJS
 I build an app for tracking Quran progress.
+
+![](https://i.ibb.co/yqddd07/main.jpg)
+
 ## Features:
 - Track Your Quran Progress.
 - See daily or session based statistics and set goal to complete Quran.
