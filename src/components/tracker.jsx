@@ -75,13 +75,12 @@ export default function Tracker(props) {
     } else {
       oldGraphData.push(total);
     }
-    oldGraphTimeData.push(formatDate(new Date(), 'dd-MMM | HH:mm aaa'));
+    oldGraphTimeData.push(formatDate(new Date(), 'dd/MMM hh:mmaaa'));
 
     localStorage.setItem('oldGraphData', JSON.stringify(oldGraphData));
     localStorage.setItem('oldGraphTimeData', JSON.stringify(oldGraphTimeData));
     localStorage.setItem('oldData', JSON.stringify(data));
-
-    window.location.reload(false);
+    alert('Updated Data!');
   };
 
   return (

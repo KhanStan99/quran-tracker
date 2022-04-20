@@ -37,7 +37,7 @@ export default function formatDate(date, patternStr) {
     HH = twoDigitPad(hour),
     mm = twoDigitPad(minute),
     ss = twoDigitPad(second),
-    aaa = hour < 12 ? 'AM' : 'PM',
+    aaa = hour < 12 ? 'am' : 'pm',
     EEEE = dayOfWeekNames[date.getDay()],
     EEE = EEEE.substr(0, 3),
     dd = twoDigitPad(day),
@@ -60,7 +60,6 @@ export default function formatDate(date, patternStr) {
     .replace('S', miliseconds)
     .replace('dd', dd)
     .replace('d', day)
-
     .replace('EEEE', EEEE)
     .replace('EEE', EEE)
     .replace('yyyy', yyyy)

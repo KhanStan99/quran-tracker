@@ -21,16 +21,19 @@ export default function Statistics(props) {
       },
       title: {
         display: true,
-        text: 'Graph View of Ayyahs Per Session',
+        text: 'Graph View of Ayyahs Per Session (Showing last 5 sessions)',
       },
     },
   };
   const data = {
-    labels: oldGraphTimeData,
+    labels:
+      oldGraphTimeData.length > 5
+        ? oldGraphTimeData.slice(0, 5)
+        : oldGraphTimeData,
     datasets: [
       {
         label: 'Checkpoint',
-        data: oldGraphData,
+        data: oldGraphData.length > 5 ? oldGraphData.slice(0, 5) : oldGraphData,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
