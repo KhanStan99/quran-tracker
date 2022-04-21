@@ -61,7 +61,7 @@ export default function App() {
               onChangeIndex={handleChangeIndex}
             >
               <TabPanel value={value} index={0}>
-                <Tracker classes={classes} />
+                <Tracker handleChangeIndex={handleChangeIndex} classes={classes} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Statistics classes={classes} />

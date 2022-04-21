@@ -80,7 +80,8 @@ export default function Tracker(props) {
     localStorage.setItem('oldGraphData', JSON.stringify(oldGraphData));
     localStorage.setItem('oldGraphTimeData', JSON.stringify(oldGraphTimeData));
     localStorage.setItem('oldData', JSON.stringify(data));
-    alert('Updated Data!');
+    alert('Bookmark Checkpoint Updated!');
+    props.handleChangeIndex(1);
   };
 
   return (

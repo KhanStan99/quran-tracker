@@ -28,12 +28,18 @@ export default function Statistics(props) {
   const data = {
     labels:
       oldGraphTimeData.length > 5
-        ? oldGraphTimeData.slice(0, 5)
+        ? oldGraphTimeData.slice(
+            oldGraphTimeData.length - 5,
+            oldGraphTimeData.length
+          )
         : oldGraphTimeData,
     datasets: [
       {
         label: 'Checkpoint',
-        data: oldGraphData.length > 5 ? oldGraphData.slice(0, 5) : oldGraphData,
+        data:
+          oldGraphData.length > 5
+            ? oldGraphData.slice(oldGraphData.length - 5, oldGraphData.length)
+            : oldGraphData,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
