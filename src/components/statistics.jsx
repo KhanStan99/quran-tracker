@@ -1,27 +1,27 @@
-import { React, useState } from "react";
-import { Typography } from "@mui/material";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, registerables } from "chart.js";
+import { React, useState } from 'react';
+import { Typography } from '@mui/material';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, registerables } from 'chart.js';
 ChartJS.register(...registerables);
 
 export default function Statistics(props) {
-  const oldData = JSON.parse(localStorage.getItem("oldData"));
-  const oldGraphData = localStorage.getItem("oldGraphData")
-    ? JSON.parse(localStorage.getItem("oldGraphData"))
+  const oldData = JSON.parse(localStorage.getItem('oldData'));
+  const oldGraphData = localStorage.getItem('oldGraphData')
+    ? JSON.parse(localStorage.getItem('oldGraphData'))
     : [];
-  const oldGraphTimeData = localStorage.getItem("oldGraphTimeData")
-    ? JSON.parse(localStorage.getItem("oldGraphTimeData"))
+  const oldGraphTimeData = localStorage.getItem('oldGraphTimeData')
+    ? JSON.parse(localStorage.getItem('oldGraphTimeData'))
     : [];
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: 'top',
       },
       title: {
         display: true,
-        text: "Graph View of Ayyahs Per Session (Showing last 5 sessions)",
+        text: 'Graph View of Ayyahs Per Session (Showing last 5 sessions)',
       },
     },
   };
@@ -35,13 +35,13 @@ export default function Statistics(props) {
         : oldGraphTimeData,
     datasets: [
       {
-        label: "Checkpoint",
+        label: 'Checkpoint',
         data:
           oldGraphData.length > 5
             ? oldGraphData.slice(oldGraphData.length - 5, oldGraphData.length)
             : oldGraphData,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
   };
@@ -55,11 +55,12 @@ export default function Statistics(props) {
     (oldGraphData.length > 5
       ? oldGraphData.slice(oldGraphData.length - 5, oldGraphData.length)
       : oldGraphData
-    ).reduce((partialSum, a) => partialSum + a, 0) / oldGraphData.length;
+    ).reduce((partialSum, a) => partialSum + a, 0) /
+    (oldGraphData.length > 5 ? 5 : oldGraphData.length);
 
   return (
-    <div style={{ textAlign: "-webkit-center" }}>
-      <Typography style={{ margin: "15px" }}>
+    <div style={{ textAlign: '-webkit-center' }}>
+      <Typography style={{ margin: '15px' }}>
         <strong>Salam!</strong> Your progress so far:
       </Typography>
       <Line options={options} data={data} />
@@ -84,7 +85,7 @@ export default function Statistics(props) {
           <tr>
             <td>Quran Left</td>
             <td>
-              {totalAayaths - totalAayahsRead} Aayahs |{"  "}
+              {totalAayaths - totalAayahsRead} Aayahs |{'  '}
               {parseFloat(
                 ((totalAayaths - totalAayahsRead) / totalAayaths) * 100
               ).toFixed(2)}
@@ -106,7 +107,7 @@ export default function Statistics(props) {
             <td>Sesssions to Complete (Based on Avg.)</td>
 
             <td>
-              {((totalAayaths - totalAayahsRead) / avgFormula).toFixed(2)}{" "}
+              {((totalAayaths - totalAayahsRead) / avgFormula).toFixed(2)}{' '}
             </td>
           </tr>
         </tbody>
