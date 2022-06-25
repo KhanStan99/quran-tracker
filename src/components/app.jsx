@@ -2,8 +2,7 @@ import { React, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import { makeStyles, ThemeProvider } from '@mui/styles';
-import { green, purple } from '@mui/material/colors';
+import { ThemeProvider } from '@mui/styles';
 import ResponsiveAppBar from './header';
 import Statistics from './statistics';
 import Tracker from './tracker';
@@ -11,15 +10,6 @@ import { Grid, Tab, Tabs } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
-
-const useStyles = makeStyles({
-  // tHeader: (props) => ({
-  //   backgroundColor: props.primary.main + ' !important',
-  // }),
-  // dropdown: (props) => ({
-  //   backgroundColor: props.primary.main + ' !important',
-  // }),
-});
 
 export default function App() {
   const theme = createTheme({
@@ -32,7 +22,6 @@ export default function App() {
       },
     },
   });
-  const classes = useStyles(theme.palette);
 
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -61,13 +50,13 @@ export default function App() {
               onChangeIndex={handleChangeIndex}
             >
               <TabPanel value={value} index={0}>
-                <Tracker handleChangeIndex={handleChangeIndex} classes={classes} />
+                <Tracker handleChangeIndex={handleChangeIndex} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Statistics classes={classes} />
+                <Statistics />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <LinksComponent classes={classes} />
+                <LinksComponent />
               </TabPanel>
             </SwipeableViews>
 

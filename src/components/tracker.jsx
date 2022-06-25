@@ -118,7 +118,6 @@ export default function Tracker(props) {
         <Typography variant="h6">Aayah List</Typography>
 
         <select
-          className={props.classes.dropdown}
           onChange={(event) =>
             aayahSelected(event.target.options.selectedIndex)
           }
