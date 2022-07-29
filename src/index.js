@@ -33,6 +33,7 @@ root.render(
     <ThemeProvider theme={theme}>
     <ResponsiveAppBar />
     <Routes>
+      <Route path="*" element={<Login />} />
       <Route path="/" element={<App />} />
       <Route path="login" element={<Login />} />
     </Routes>
