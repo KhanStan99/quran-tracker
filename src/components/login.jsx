@@ -2,11 +2,67 @@ import React, { useState } from 'react';
 import { Grid, TextField, Paper, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import './login.css';
+import loginService from '../services/login-service';
 
 export default function Login() {
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
+  const [otp, setOtp] = useState(null);
+  const [loginEmail, setLoginEmail] = useState(null);
+  const [otpData, setOtpData] = useState(null);
   const [isLoginOtpSend, setIsLoginOtpSend] = useState(false);
+
+  const handleSignup = () => {
+    if (validateEmail(email) && name) {
+      loginService
+        .signUp({ name, email })
+        .then(() => {
+          alert('Signup Successful');
+        })
+        .catch((err) => {
+          alert('Error in Signup: ' + err.response.data.message);
+        });
+    }
+  };
+
+  const handleSendOTP = () => {
+    if (validateEmail(loginEmail)) {
+      loginService
+        .sendOtp({ email: loginEmail })
+        .then((response) => {
+          setOtpData(response.data);
+          alert('OTP sent Successful!');
+          setIsLoginOtpSend(true);
+        })
+        .catch((err) => {
+          alert('Error in Signup: ' + err.response.data.message);
+        });
+    }
+  };
+
+  const handleVerifyOTP = () => {
+    if (otp.length === 4) {
+      let body = otpData;
+      body.otp = otp;
+      loginService
+        .verifyOtp(otpData)
+        .then(() => {
+          alert('LOGIN Successful!');
+        })
+        .catch((err) => {
+          alert('Error in Signup: ' + err.response.data.message);
+        });
+    }
+  };
+
+  function validateEmail(emailAdress) {
+    let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (emailAdress && emailAdress.match(regexEmail)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return (
     <Grid container>
@@ -24,8 +80,6 @@ export default function Login() {
         xs={12}
         sm={12}
         md={6}
-        spacing={2}
-        direction={'column'}
         justify={'center'}
         alignItems={'center'}
         textAlign={'center'}
@@ -38,8 +92,13 @@ export default function Login() {
               required
               fullWidth
               label="Email"
+              onChange={(e) => setLoginEmail(e.target.value)}
+              error={loginEmail && !validateEmail(loginEmail)}
               variant="filled"
             />
+            {loginEmail && !validateEmail(loginEmail)
+              ? 'Enter valid email address'
+              : null}
           </Grid>
           <Grid item style={{ margin: '12px' }}>
             <TextField
@@ -48,11 +107,17 @@ export default function Login() {
               fullWidth
               label="OTP"
               variant="filled"
+              onChange={(e) => setOtp(e.target.value)}
+              error={otp && otp.length < 4}
             />
+            {otp && otp.length < 4 ? 'Minimum 4 digits required' : null}
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained" onClick={() => setIsLoginOtpSend(true)}>
+            <Button
+              variant="contained"
+              onClick={isLoginOtpSend ? handleVerifyOTP : handleSendOTP}
+            >
               {isLoginOtpSend ? 'Verify OTP' : 'Send OTP'}
             </Button>
           </Grid>
@@ -64,7 +129,6 @@ export default function Login() {
         xs={12}
         sm={12}
         md={6}
-        spacing={2}
         justify={'center'}
         alignItems={'center'}
         textAlign={'center'}
@@ -74,22 +138,30 @@ export default function Login() {
           <Grid item style={{ margin: '12px' }}>
             <TextField
               fullWidth
+              onChange={(e) => setName(e.target.value)}
               required
+              error={name && name.length < 3}
               label="Name"
               variant="filled"
             />
+            {name && name.length < 3 ? 'Minimum 3 characters required' : null}
           </Grid>
           <Grid item style={{ margin: '12px' }}>
             <TextField
-              required
               fullWidth
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              error={email && !validateEmail(email)}
               label="Email"
               variant="filled"
             />
+            {email && !validateEmail(email)
+              ? 'Enter valid email address'
+              : null}
           </Grid>
           <Grid style={{ textAlign: 'start' }}>
             <Typography variant="body1" textAlign={'center'}>
-              Remeber these points before continuing:
+              <b>Remeber these points before continuing:</b>
             </Typography>
             <ul>
               <li>
@@ -114,7 +186,9 @@ export default function Login() {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained">SignUp</Button>
+            <Button variant="contained" onClick={handleSignup}>
+              SignUp
+            </Button>
           </Grid>
         </Paper>
       </Grid>
