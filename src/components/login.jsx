@@ -46,8 +46,9 @@ export default function Login() {
       body.otp = otp;
       loginService
         .verifyOtp(otpData)
-        .then(() => {
+        .then((response) => {
           alert('LOGIN Successful!');
+          sessionStorage.setItem('userId', response.data.userId);
         })
         .catch((err) => {
           alert('Error in Signup: ' + err.response.data.message);
@@ -57,11 +58,7 @@ export default function Login() {
 
   function validateEmail(emailAdress) {
     let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (emailAdress && emailAdress.match(regexEmail)) {
-      return true;
-    } else {
-      return false;
-    }
+    return emailAdress && emailAdress.match(regexEmail);
   }
 
   return (
