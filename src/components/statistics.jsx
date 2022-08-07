@@ -29,7 +29,7 @@ export default function Statistics() {
           setCurrentSurah(data.current_surah);
           setCurrentAayahNo(data.current_aayah);
           let total = 0;
-          if (data.current_surah != 1) {
+          if (data.current_surah != 0) {
             for (let i = 0; i <= data.current_surah - 2; i++) {
               total = total + list[i].total_verses;
             }

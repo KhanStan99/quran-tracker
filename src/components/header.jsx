@@ -8,21 +8,27 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
 
-const settings = ['Reset Statistics'];
+const settings = [
+  { id: 0, name: 'Logout', visible: sessionStorage.getItem('user') !== null },
+];
 
 const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const navigate = useNavigate();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseUserMenu = (e) => {
     setAnchorElUser(null);
-    if (e === 'Reset Statistics') {
-      localStorage.clear();
-      window.location.reload(false);
+    console.log('🚀 ~ file: header.jsx ~ line 31 ~ e', e);
+    switch (e) {
+      case 0: {
+        localStorage.removeItem('user');
+        navigate('/home');
+      }
     }
   };
 
@@ -59,16 +65,18 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={() => {
-                    handleCloseUserMenu(setting);
-                  }}
-                >
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {settings.map((setting) =>
+                setting.visible ? (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => {
+                      handleCloseUserMenu(setting.id);
+                    }}
+                  >
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                ) : null
+              )}
             </Menu>
           </Box>
         </Toolbar>

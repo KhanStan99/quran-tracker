@@ -6,8 +6,12 @@ import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
 
 export default function Tracker(props) {
-  const [currentSurah, setCurrentSurah] = useState(1);
+  const [lastSurah, setLastSurah] = useState(0);
+  const [lastAayahNo, setLastAayahNo] = useState(0);
+
   const [currentAayahNo, setCurrentAayahNo] = useState(0);
+  const [currentSurah, setCurrentSurah] = useState(0);
+
   const [totalAayahsRead, setTotalAayahsRead] = useState(0);
   const [list] = useState(quran);
   const [aayah, setAayah] = useState('');
@@ -21,18 +25,9 @@ export default function Tracker(props) {
         if (res.data.length > 0) {
           let data = res.data[0];
 
-          setCurrentSurah(data.current_surah);
-          setCurrentAayahNo(data.current_aayah);
-          let total = 0;
-          if (data.current_surah != 1) {
-            for (let i = 0; i <= data.current_surah - 2; i++) {
-              total = total + list[i].total_verses;
-            }
-
-            setTotalAayahsRead(total + data.current_aayah);
-          } else {
-            setTotalAayahsRead(data.current_aayah);
-          }
+          setLastSurah(data.current_surah);
+          setLastAayahNo(data.current_aayah);
+          setTotalAayahsRead(data.total_read);
         }
       })
       .catch((err) => {
@@ -41,8 +36,8 @@ export default function Tracker(props) {
   }, []);
 
   useEffect(() => {
-    setVersesList(currentSurah ? list[currentSurah - 1].verses : []);
-  }, [currentSurah]);
+    setVersesList(lastSurah ? list[lastSurah - 1].verses : []);
+  }, [lastSurah]);
 
   const surahSelected = (e) => {
     setCurrentSurah(e);
@@ -68,7 +63,19 @@ export default function Tracker(props) {
 
   const saveData = () => {
     let total = 0;
-    if (currentSurah != 1) {
+    let lastTotal = 0;
+    
+
+    if (lastSurah != 0) {
+      for (let i = 0; i <= lastSurah - 2; i++) {
+        lastTotal = lastTotal + list[i].total_verses;
+      }
+      lastTotal = lastTotal + lastAayahNo;
+    } else {
+      lastTotal = lastAayahNo;
+    }
+
+    if (currentSurah != 0) {
       for (let i = 0; i <= currentSurah - 2; i++) {
         total = total + list[i].total_verses;
       }
@@ -77,7 +84,7 @@ export default function Tracker(props) {
       total = currentAayahNo;
     }
     let data = {
-      aayah_total: total,
+      aayah_total: total - lastTotal,
       userId: localStorage.getItem('user'),
       current_surah: currentSurah,
       current_aayah: currentAayahNo,
@@ -100,10 +107,10 @@ export default function Tracker(props) {
       <Typography variant="h6" style={{ margin: '15px' }}>
         Salam! Select your last read Surah and aayah and save your progress!
       </Typography>
-      {currentSurah > 0 || currentAayahNo > 0 ? (
+      {lastSurah > 0 || lastAayahNo > 0 ? (
         <Typography variant="body1">
           <strong>Last Aayah: </strong>
-          {currentSurah} : {currentAayahNo}{' '}
+          {lastSurah} : {lastAayahNo}{' '}
         </Typography>
       ) : null}
 

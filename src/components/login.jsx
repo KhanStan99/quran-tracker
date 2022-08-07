@@ -13,6 +13,9 @@ export default function Login() {
   const [otpData, setOtpData] = useState(null);
   const [isLoginOtpSend, setIsLoginOtpSend] = useState(false);
   const navigate = useNavigate();
+  let auth = localStorage.getItem('user');
+
+  if (auth) navigate('/home');
 
   const handleSignup = () => {
     if (validateEmail(email) && name) {
