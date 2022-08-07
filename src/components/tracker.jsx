@@ -1,33 +1,48 @@
-import { React, useState } from 'react';
 import { Typography } from '@mui/material';
-import quran from '../assets/quran.json';
+import { React, useState, useEffect } from 'react';
 import formatDate from '../date-formatter';
 import Button from '@mui/material/Button';
+import dataService from '../services/data-service';
+import quran from '../assets/quran.json';
 
 export default function Tracker(props) {
-  const oldData = JSON.parse(localStorage.getItem('oldData'));
-  const oldGraphData = localStorage.getItem('oldGraphData')
-    ? JSON.parse(localStorage.getItem('oldGraphData'))
-    : [];
-  const oldGraphTimeData = localStorage.getItem('oldGraphTimeData')
-    ? JSON.parse(localStorage.getItem('oldGraphTimeData'))
-    : [];
-
+  const [currentSurah, setCurrentSurah] = useState(1);
+  const [currentAayahNo, setCurrentAayahNo] = useState(0);
+  const [totalAayahsRead, setTotalAayahsRead] = useState(0);
   const [list] = useState(quran);
-  const [currentSurah, setCurrentSurah] = useState(
-    oldData ? oldData.currentSurah : 0
-  );
-  const [currentAayahNo, setCurrentAayahNo] = useState(
-    oldData ? oldData.currentAayahNo : 0
-  );
-  const [versesList, setVersesList] = useState(
-    currentSurah ? list[currentSurah - 1].verses : []
-  );
   const [aayah, setAayah] = useState('');
-  const [totalAayahsRead, setTotalAayahs] = useState(
-    oldData ? oldData.totalAayahsRead : 0
-  );
+  const [versesList, setVersesList] = useState([]);
   const totalAayaths = 6236;
+
+  useEffect(() => {
+    dataService
+      .getData(localStorage.getItem('user'))
+      .then((res) => {
+        if (res.data.length > 0) {
+          let data = res.data[0];
+
+          setCurrentSurah(data.current_surah);
+          setCurrentAayahNo(data.current_aayah);
+          let total = 0;
+          if (data.current_surah != 1) {
+            for (let i = 0; i <= data.current_surah - 2; i++) {
+              total = total + list[i].total_verses;
+            }
+
+            setTotalAayahsRead(total + data.current_aayah);
+          } else {
+            setTotalAayahsRead(data.current_aayah);
+          }
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    setVersesList(currentSurah ? list[currentSurah - 1].verses : []);
+  }, [currentSurah]);
 
   const surahSelected = (e) => {
     setCurrentSurah(e);
@@ -53,7 +68,7 @@ export default function Tracker(props) {
 
   const saveData = () => {
     let total = 0;
-    if (currentSurah != 0) {
+    if (currentSurah != 1) {
       for (let i = 0; i <= currentSurah - 2; i++) {
         total = total + list[i].total_verses;
       }
@@ -61,27 +76,23 @@ export default function Tracker(props) {
     } else {
       total = currentAayahNo;
     }
-    setTotalAayahs(total);
     let data = {
-      totalAayahsRead: total,
-      currentSurah: currentSurah,
-      currentAayahNo: currentAayahNo,
-      currentAayah: aayah,
-      percentage: parseFloat((totalAayahsRead / totalAayaths) * 100).toFixed(2),
+      aayah_total: total,
+      userId: localStorage.getItem('user'),
+      current_surah: currentSurah,
+      current_aayah: currentAayahNo,
+      time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
     };
 
-    if (oldData) {
-      oldGraphData.push(total - oldData.totalAayahsRead);
-    } else {
-      oldGraphData.push(total);
-    }
-    oldGraphTimeData.push(formatDate(new Date(), 'dd/MMM hh:mmaaa'));
-
-    localStorage.setItem('oldGraphData', JSON.stringify(oldGraphData));
-    localStorage.setItem('oldGraphTimeData', JSON.stringify(oldGraphTimeData));
-    localStorage.setItem('oldData', JSON.stringify(data));
-    alert('Bookmark Checkpoint Updated!');
-    props.handleChangeIndex(1);
+    dataService
+      .updateData(data)
+      .then(() => {
+        alert('Bookmark Checkpoint Updated!');
+        props.handleChangeIndex(1);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   return (

@@ -27,17 +27,17 @@ const theme = createTheme({
 });
 
 root.render(
-  
+
   <StrictMode>
     <BrowserRouter>
-    <ThemeProvider theme={theme}>
-    <ResponsiveAppBar />
-    <Routes>
-      <Route path="*" element={<Login />} />
-      <Route path="/" element={<App />} />
-      <Route path="login" element={<Login />} />
-    </Routes>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ResponsiveAppBar />
+        <Routes>
+          <Route path="*" element={<Login />} />
+          <Route index path="/login" element={<Login />} />
+          <Route path="/home" element={<App />} />
+        </Routes>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 );

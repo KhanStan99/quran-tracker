@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
@@ -7,8 +7,10 @@ import { Grid, Tab, Tabs } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
+import { Navigate } from "react-router-dom";
 
 export default function App() {
+  let auth = localStorage.getItem('user');
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -17,7 +19,10 @@ export default function App() {
     setValue(index);
   };
 
-  return (
+
+  return !auth ? (
+    <Navigate replace to="/login" />
+  ) : (
     <Grid container direction="row">
       <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
       <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">

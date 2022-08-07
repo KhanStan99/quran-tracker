@@ -3,6 +3,7 @@ import { Grid, TextField, Paper, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import './login.css';
 import loginService from '../services/login-service';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [name, setName] = useState(null);
@@ -11,6 +12,7 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState(null);
   const [otpData, setOtpData] = useState(null);
   const [isLoginOtpSend, setIsLoginOtpSend] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = () => {
     if (validateEmail(email) && name) {
@@ -48,7 +50,8 @@ export default function Login() {
         .verifyOtp(otpData)
         .then((response) => {
           alert('LOGIN Successful!');
-          sessionStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('user', response.data.userId);
+          navigate('/home');
         })
         .catch((err) => {
           alert('Error in Signup: ' + err.response.data.message);
