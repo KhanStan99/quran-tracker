@@ -2,6 +2,8 @@
 #  Quran Tracker App | ReactJS
 I build an app for tracking Quran progress.
 
+> __Login is available now!__
+
 ![](https://i.ibb.co/yqddd07/main.jpg)
 
 ## Features:
