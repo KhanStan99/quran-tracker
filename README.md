@@ -12,7 +12,7 @@ I build an app for tracking Quran progress.
 
 ## Live At: 
 
-Live at: https://khanstan99.github.io/quran-tracker
+Live at: https://quran-read-tracker.web.app/
 
 ## Screenshots:
 ![Tracker - Surah and Aayah](https://i.ibb.co/1Z9mq86/1.png)
