@@ -9,8 +9,13 @@ const updateData = (params) => {
     return axios.post(config.base_url + "data", params);
 }
 
+const deleteLatestEntry = (userId) => {
+    return axios.delete(config.base_url + `data?userId=${userId}`);
+}
+
 
 module.exports = {
     getData,
-    updateData
+    updateData,
+    deleteLatestEntry
 };

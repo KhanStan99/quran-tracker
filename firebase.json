@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "public",
+    "site": "quran-read-tracker",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",

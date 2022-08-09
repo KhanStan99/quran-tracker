@@ -6,7 +6,7 @@ import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
 ChartJS.register(...registerables);
 
-export default function Statistics() {
+export default function Statistics(props) {
   const [oldGraphData, setOldGraphData] = useState([]);
   const [oldGraphTimeData, setOldGraphTimeData] = useState([]);
   const [currentSurah, setCurrentSurah] = useState(0);
@@ -16,6 +16,7 @@ export default function Statistics() {
   const [avgFormula, setAvgFormula] = useState(0);
   const [list] = useState(quran);
   const totalAayaths = 6236;
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     dataService
@@ -39,6 +40,7 @@ export default function Statistics() {
             setTotalAayahsRead(data.current_aayah);
           }
         }
+        setLoading(false);
       })
       .catch((err) => {
         alert(err);
@@ -64,6 +66,17 @@ export default function Statistics() {
     let sum = latest5.reduce((sum, nextNum) => sum + nextNum, 0);
     setAvgFormula(sum / (historyLength > 5 ? 5 : historyLength));
   }, [oldGraphData]);
+
+  const deleteClicked = () => {
+    dataService
+      .deleteLatestEntry(localStorage.getItem('user'))
+      .then((res) => {
+        props.handleChangeIndex(0);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   const options = {
     responsive: true,
@@ -98,7 +111,7 @@ export default function Statistics() {
     ],
   };
 
-  return (
+  return !isLoading ? (
     <div style={{ textAlign: '-webkit-center' }}>
       <Typography style={{ margin: '15px' }}>
         <strong>Salam!</strong> Your progress so far:
@@ -139,14 +152,14 @@ export default function Statistics() {
           </tr>
           <tr>
             <td>Average Aayah(s) read per session (Avg. of last 5 sessions)</td>
-            <td>{avgFormula ? avgFormula.toFixed(2) + " Aayah's" : null}</td>
+            <td>{avgFormula ? avgFormula.toFixed(2) + " Aayah's" : "N/A"}</td>
           </tr>
           <tr>
             <td>Sesssions to Complete (Based on Avg.)</td>
             <td>
               {avgFormula
                 ? ((totalAayaths - totalAayahsRead) / avgFormula).toFixed(2)
-                : null}
+                : "N/A"}
             </td>
           </tr>
         </tbody>
@@ -163,12 +176,21 @@ export default function Statistics() {
             return (
               <tr key={index}>
                 <td>{oldGraphTimeData[index]}</td>
-                <td>{item}</td>
+                <td>
+                  {item}{' '}
+                  {index === oldGraphData.length - 1 ? (
+                    <strong onClick={deleteClicked}>
+                      <i>Delete Entry</i>
+                    </strong>
+                  ) : null}
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
     </div>
+  ) : (
+    <p>Loading</p>
   );
 }

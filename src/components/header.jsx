@@ -12,6 +12,11 @@ import { useNavigate } from 'react-router-dom';
 
 const settings = [
   { id: 0, name: 'Logout', visible: sessionStorage.getItem('user') !== null },
+  // {
+  //   id: 1,
+  //   name: 'Reset Data',
+  //   visible: sessionStorage.getItem('user') !== null,
+  // },
 ];
 
 const ResponsiveAppBar = () => {
@@ -23,11 +28,15 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = (e) => {
     setAnchorElUser(null);
-    console.log('🚀 ~ file: header.jsx ~ line 31 ~ e', e);
     switch (e) {
       case 0: {
         localStorage.removeItem('user');
-        navigate('/home');
+        navigate('/login');
+        break;
+      }
+      case 1: {
+        alert('Reset Data');
+        break;
       }
     }
   };
@@ -45,28 +54,28 @@ const ResponsiveAppBar = () => {
         >
           <Typography variant="h6">Quran Tracker</Typography>
 
-          <Box>
-            <Tooltip title="More">
-              <MoreVertIcon onClick={handleOpenUserMenu} />
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) =>
-                setting.visible ? (
+          {localStorage.getItem('user') ? (
+            <Box>
+              <Tooltip title="More">
+                <MoreVertIcon onClick={handleOpenUserMenu} />
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
                   <MenuItem
                     key={setting}
                     onClick={() => {
@@ -75,10 +84,10 @@ const ResponsiveAppBar = () => {
                   >
                     <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
-                ) : null
-              )}
-            </Menu>
-          </Box>
+                ))}
+              </Menu>
+            </Box>
+          ) : null}
         </Toolbar>
       </Container>
     </AppBar>

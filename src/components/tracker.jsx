@@ -16,7 +16,7 @@ export default function Tracker(props) {
   const [list] = useState(quran);
   const [aayah, setAayah] = useState('');
   const [versesList, setVersesList] = useState([]);
-  const totalAayaths = 6236;
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     dataService
@@ -29,6 +29,7 @@ export default function Tracker(props) {
           setLastAayahNo(data.current_aayah);
           setTotalAayahsRead(data.total_read);
         }
+        setLoading(false);
       })
       .catch((err) => {
         alert(err);
@@ -64,7 +65,6 @@ export default function Tracker(props) {
   const saveData = () => {
     let total = 0;
     let lastTotal = 0;
-    
 
     if (lastSurah != 0) {
       for (let i = 0; i <= lastSurah - 2; i++) {
@@ -102,7 +102,7 @@ export default function Tracker(props) {
       });
   };
 
-  return (
+  return !isLoading ? (
     <div style={{ textAlign: '-webkit-center' }}>
       <Typography variant="h6" style={{ margin: '15px' }}>
         Salam! Select your last read Surah and aayah and save your progress!
@@ -170,5 +170,7 @@ export default function Tracker(props) {
         Save
       </Button>
     </div>
+  ) : (
+    <p>Loading</p>
   );
 }

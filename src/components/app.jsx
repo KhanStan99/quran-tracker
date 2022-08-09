@@ -42,7 +42,7 @@ export default function App() {
               <Tracker handleChangeIndex={handleChangeIndex} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Statistics />
+              <Statistics handleChangeIndex={handleChangeIndex}/>
             </TabPanel>
             <TabPanel value={value} index={2}>
               <LinksComponent />

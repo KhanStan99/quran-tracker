@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, TextField, Paper, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import './login.css';
@@ -15,7 +15,9 @@ export default function Login() {
   const navigate = useNavigate();
   let auth = localStorage.getItem('user');
 
-  if (auth) navigate('/home');
+  useEffect(() => {
+    if (auth) navigate('/home');
+  });
 
   const handleSignup = () => {
     if (validateEmail(email) && name) {
@@ -40,6 +42,7 @@ export default function Login() {
           setIsLoginOtpSend(true);
         })
         .catch((err) => {
+          console.log('🚀 ~ file: login.jsx ~ line 43 ~ err', err.response);
           alert('Error in Signup: ' + err.response.data.message);
         });
     }
