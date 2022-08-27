@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, TextField, Paper, Typography } from '@mui/material';
-import Button from '@mui/material/Button';
 import './login.css';
 import loginService from '../services/login-service';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 export default function Login() {
   const [name, setName] = useState(null);
@@ -12,12 +13,26 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState(null);
   const [otpData, setOtpData] = useState(null);
   const [isLoginOtpSend, setIsLoginOtpSend] = useState(false);
+  const [snackBarOptions, setSnackBarOptions] = useState({
+    open: false,
+    severity: 'info',
+    message: null,
+  });
   const navigate = useNavigate();
   let auth = localStorage.getItem('user');
 
   useEffect(() => {
     if (auth) navigate('/home');
   });
+
+  const handleClick = (open, severity, message) => {
+    //severity = "error", "warning", "info", "success"
+    setSnackBarOptions({ open, severity, message });
+  };
+
+  const handleClose = () => {
+    setSnackBarOptions(false);
+  };
 
   const handleSignup = () => {
     if (validateEmail(email) && name) {
@@ -29,6 +44,8 @@ export default function Login() {
         .catch((err) => {
           alert('Error in Signup: ' + err.response.data.message);
         });
+    } else {
+      handleClick(true, 'error', 'Please enter email address & Name!');
     }
   };
 
@@ -42,9 +59,11 @@ export default function Login() {
           setIsLoginOtpSend(true);
         })
         .catch((err) => {
-          console.log('🚀 ~ file: login.jsx ~ line 43 ~ err', err.response);
           alert('Error in Signup: ' + err.response.data.message);
         });
+    } else {
+      handleClick(true, 'error', 'Please enter email address!');
+      setLoginEmail('xyz');
     }
   };
 
@@ -62,6 +81,8 @@ export default function Login() {
         .catch((err) => {
           alert('Error in Signup: ' + err.response.data.message);
         });
+    } else {
+      handleClick(true, 'error', 'Please enter 4 digit OTP!');
     }
   };
 
@@ -72,6 +93,17 @@ export default function Login() {
 
   return (
     <Grid container>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackBarOptions.open}
+        onClose={handleClose}
+        key={'top' + 'right'}
+      >
+        <Alert severity={snackBarOptions.severity} sx={{ width: '100%' }}>
+          {snackBarOptions.message}
+        </Alert>
+      </Snackbar>
+
       <Typography
         variant="h5"
         textAlign={'center'}
@@ -90,7 +122,16 @@ export default function Login() {
         alignItems={'center'}
         textAlign={'center'}
       >
-        <Paper style={{ padding: '24px', margin: '24px' }}>
+        <Grid
+          style={{
+            padding: '24px',
+            margin: '24px',
+            boxShadow:
+              'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
+            borderRadius: '10px',
+            border: '2px solid #edf1f4',
+          }}
+        >
           <Typography variant="h4">Login</Typography>
           <Grid item style={{ margin: '12px' }}>
             <TextField
@@ -102,9 +143,9 @@ export default function Login() {
               error={loginEmail && !validateEmail(loginEmail)}
               variant="filled"
             />
-            {loginEmail && !validateEmail(loginEmail)
-              ? 'Enter valid email address'
-              : null}
+            {loginEmail && !validateEmail(loginEmail) ? (
+              <Typography variant="body1">Enter valid email address</Typography>
+            ) : null}
           </Grid>
           <Grid item style={{ margin: '12px' }}>
             <TextField
@@ -120,14 +161,14 @@ export default function Login() {
           </Grid>
 
           <Grid item xs={12}>
-            <Button
-              variant="contained"
+            <button
               onClick={isLoginOtpSend ? handleVerifyOTP : handleSendOTP}
+              class="raised_button"
             >
               {isLoginOtpSend ? 'Verify OTP' : 'Send OTP'}
-            </Button>
+            </button>
           </Grid>
-        </Paper>
+        </Grid>
       </Grid>
 
       <Grid
@@ -139,7 +180,16 @@ export default function Login() {
         alignItems={'center'}
         textAlign={'center'}
       >
-        <Paper style={{ padding: '24px', margin: '24px' }}>
+        <Grid
+          style={{
+            padding: '24px',
+            margin: '24px',
+            boxShadow:
+              'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
+            borderRadius: '10px',
+            border: '2px solid #edf1f4',
+          }}
+        >
           <Typography variant="h4">SignUp</Typography>
           <Grid item style={{ margin: '12px' }}>
             <TextField
@@ -161,9 +211,9 @@ export default function Login() {
               label="Email"
               variant="filled"
             />
-            {email && !validateEmail(email)
-              ? 'Enter valid email address'
-              : null}
+            {email && !validateEmail(email) ? (
+              <Typography variant="body1">Enter valid email address</Typography>
+            ) : null}
           </Grid>
           <Grid style={{ textAlign: 'start' }}>
             <Typography variant="body1" textAlign={'center'}>
@@ -192,12 +242,16 @@ export default function Login() {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained" onClick={handleSignup}>
+            <button onClick={handleSignup} class="raised_button">
               SignUp
-            </Button>
+            </button>
           </Grid>
-        </Paper>
+        </Grid>
       </Grid>
     </Grid>
   );
 }
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});

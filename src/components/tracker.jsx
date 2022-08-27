@@ -114,6 +114,13 @@ export default function Tracker(props) {
         </Typography>
       ) : null}
 
+      {currentSurah > 0 || currentAayahNo > 0 ? (
+        <Typography variant="body1">
+          <strong>Current Aayah: </strong>
+          {currentSurah} : {currentAayahNo}{' '}
+        </Typography>
+      ) : null}
+
       <div style={{ marginTop: '15px' }}>
         <Typography variant="h6">Surah List</Typography>
         <select
