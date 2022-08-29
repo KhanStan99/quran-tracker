@@ -22,8 +22,9 @@ export default function Tracker(props) {
     dataService
       .getData(localStorage.getItem('user'))
       .then((res) => {
-        if (res.data.length > 0) {
-          let data = res.data[0];
+        if (res.data.data.length > 0) {
+          const mainData = res.data.data;
+          let data = mainData[mainData.length - 1];
 
           setLastSurah(data.current_surah);
           setLastAayahNo(data.current_aayah);
@@ -84,11 +85,13 @@ export default function Tracker(props) {
       total = currentAayahNo;
     }
     let data = {
-      aayah_total: total - lastTotal,
+      data: {
+        aayah_total: total - lastTotal,
+        current_surah: currentSurah,
+        current_aayah: currentAayahNo,
+        time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
+      },
       userId: localStorage.getItem('user'),
-      current_surah: currentSurah,
-      current_aayah: currentAayahNo,
-      time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
     };
 
     dataService
