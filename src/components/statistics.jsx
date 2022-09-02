@@ -1,9 +1,11 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Typography } from '@mui/material';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
+import UserContext from './UserContext';
+
 ChartJS.register(...registerables);
 
 export default function Statistics(props) {
@@ -17,16 +19,29 @@ export default function Statistics(props) {
   const [list] = useState(quran);
   const totalAayaths = 6236;
   const [isLoading, setLoading] = useState(true);
+  const showAlert = useContext(UserContext);
 
   useEffect(() => {
     dataService
-      .getData(localStorage.getItem('user'))
+      .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
-        if (res.data.length > 0) {
-          let data = res.data[0];
+        if (res.data.data.length > 0) {
+          const mainData = res.data.data;
+          let data = mainData[mainData.length - 1];
+          console.log('🚀 ~ file: statistics.jsx ~ line 28 ~ data', data);
 
-          setOldGraphTimeData(data.time_stamp);
-          setOldGraphData(data.aayah_total);
+          let ff = [];
+          let gg = [];
+          mainData.forEach((bush) => {
+            ff.push(bush.aayah_total);
+          });
+          mainData.forEach((bush) => {
+            gg.push(bush.time_stamp);
+          });
+
+          setOldGraphData(ff);
+          setOldGraphTimeData(gg);
+
           setCurrentSurah(data.current_surah);
           setCurrentAayahNo(data.current_aayah);
           let total = 0;
@@ -43,7 +58,7 @@ export default function Statistics(props) {
         setLoading(false);
       })
       .catch((err) => {
-        alert(err);
+        showAlert(true, 'error', err);
       });
   }, []);
 
@@ -69,12 +84,12 @@ export default function Statistics(props) {
 
   const deleteClicked = () => {
     dataService
-      .deleteLatestEntry(localStorage.getItem('user'))
+      .deleteLatestEntry(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
         props.handleChangeIndex(0);
       })
       .catch((err) => {
-        alert(err);
+        showAlert(true, 'error', err);
       });
   };
 
@@ -152,14 +167,14 @@ export default function Statistics(props) {
           </tr>
           <tr>
             <td>Average Aayah(s) read per session (Avg. of last 5 sessions)</td>
-            <td>{avgFormula ? avgFormula.toFixed(2) + " Aayah's" : "N/A"}</td>
+            <td>{avgFormula ? avgFormula.toFixed(2) + " Aayah's" : 'N/A'}</td>
           </tr>
           <tr>
             <td>Sesssions to Complete (Based on Avg.)</td>
             <td>
               {avgFormula
                 ? ((totalAayaths - totalAayahsRead) / avgFormula).toFixed(2)
-                : "N/A"}
+                : 'N/A'}
             </td>
           </tr>
         </tbody>

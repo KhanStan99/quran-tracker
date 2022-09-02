@@ -1,9 +1,9 @@
-import { React, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
 import Tracker from './tracker';
-import { Grid, Tab, Tabs } from '@mui/material';
+import { Grid, Tab, Tabs, Typography } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
@@ -22,13 +22,7 @@ export default function App() {
   return !auth ? (
     <Navigate replace to="/login" />
   ) : (
-    <Grid
-      container
-      direction="row"
-      style={{
-        height: '92vh',
-      }}
-    >
+    <Grid container direction="row">
       <Grid
         item
         xs={false}
@@ -36,11 +30,24 @@ export default function App() {
         md={3}
         lg={4}
         xl={4}
-        style={{ backgroundColor: '#262626' }}
+        // style={{ backgroundColor: '#262626' }}
       ></Grid>
       <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
+        <Grid
+          style={{
+            backgroundColor: '#1976d2',
+            textAlign: 'start',
+            paddingLeft: '24px',
+            paddingBottom: '24px',
+            color: '#FFF',
+          }}
+        >
+          <Typography variant="h4">
+            Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
+          </Typography>
+        </Grid>
         <Item>
-          <Tabs value={value} onChange={handleChange}>
+          <Tabs variant="fullWidth" value={value} onChange={handleChange}>
             <Tab label="Tracker" />
             <Tab label="Statistics" />
             <Tab label="About Dev" />
@@ -61,15 +68,6 @@ export default function App() {
               <LinksComponent />
             </TabPanel>
           </SwipeableViews>
-
-          <footer>
-            <p>
-              If you have any feedback, bug report or want to contribute,{' '}
-              <a href="mailto:soubankhan3@gmail.com" target="_blank">
-                then send me an email
-              </a>
-            </p>
-          </footer>
         </Item>
       </Grid>
       <Grid
@@ -79,7 +77,7 @@ export default function App() {
         md={3}
         lg={4}
         xl={4}
-        style={{ backgroundColor: '#262626' }}
+        // style={{ backgroundColor: '#262626' }}
       ></Grid>
     </Grid>
   );

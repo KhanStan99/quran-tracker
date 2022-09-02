@@ -1,26 +1,28 @@
 import { Typography } from '@mui/material';
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import formatDate from '../date-formatter';
-import Button from '@mui/material/Button';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
+import UserContext from './UserContext';
+import './styles.css';
 
 export default function Tracker(props) {
   const [lastSurah, setLastSurah] = useState(0);
   const [lastAayahNo, setLastAayahNo] = useState(0);
 
-  const [currentAayahNo, setCurrentAayahNo] = useState(0);
-  const [currentSurah, setCurrentSurah] = useState(0);
+  const [currentAayahNo, setCurrentAayahNo] = useState(null);
+  const [currentSurah, setCurrentSurah] = useState(null);
 
   const [totalAayahsRead, setTotalAayahsRead] = useState(0);
   const [list] = useState(quran);
   const [aayah, setAayah] = useState('');
   const [versesList, setVersesList] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const showAlert = useContext(UserContext);
 
   useEffect(() => {
     dataService
-      .getData(localStorage.getItem('user'))
+      .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
         if (res.data.data.length > 0) {
           const mainData = res.data.data;
@@ -33,7 +35,7 @@ export default function Tracker(props) {
         setLoading(false);
       })
       .catch((err) => {
-        alert(err);
+        showAlert(true, 'error', err);
       });
   }, []);
 
@@ -64,49 +66,53 @@ export default function Tracker(props) {
   };
 
   const saveData = () => {
-    let total = 0;
-    let lastTotal = 0;
+    if (currentSurah && currentAayahNo) {
+      let total = 0;
+      let lastTotal = 0;
 
-    if (lastSurah != 0) {
-      for (let i = 0; i <= lastSurah - 2; i++) {
-        lastTotal = lastTotal + list[i].total_verses;
+      if (lastSurah != 0) {
+        for (let i = 0; i <= lastSurah - 2; i++) {
+          lastTotal = lastTotal + list[i].total_verses;
+        }
+        lastTotal = lastTotal + lastAayahNo;
+      } else {
+        lastTotal = lastAayahNo;
       }
-      lastTotal = lastTotal + lastAayahNo;
-    } else {
-      lastTotal = lastAayahNo;
-    }
 
-    if (currentSurah != 0) {
-      for (let i = 0; i <= currentSurah - 2; i++) {
-        total = total + list[i].total_verses;
+      if (currentSurah != 0) {
+        for (let i = 0; i <= currentSurah - 2; i++) {
+          total = total + list[i].total_verses;
+        }
+        total = total + currentAayahNo;
+      } else {
+        total = currentAayahNo;
       }
-      total = total + currentAayahNo;
-    } else {
-      total = currentAayahNo;
-    }
-    let data = {
-      data: {
-        aayah_total: total - lastTotal,
-        current_surah: currentSurah,
-        current_aayah: currentAayahNo,
-        time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
-      },
-      userId: localStorage.getItem('user'),
-    };
+      let data = {
+        data: {
+          aayah_total: total - lastTotal,
+          current_surah: currentSurah,
+          current_aayah: currentAayahNo,
+          time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
+        },
+        userId: JSON.parse(localStorage.getItem('user')).userId,
+      };
 
-    dataService
-      .updateData(data)
-      .then(() => {
-        alert('Bookmark Checkpoint Updated!');
-        props.handleChangeIndex(1);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+      dataService
+        .updateData(data)
+        .then(() => {
+          showAlert(true, 'success', 'Bookmark Checkpoint Updated!');
+          props.handleChangeIndex(1);
+        })
+        .catch((err) => {
+          showAlert(true, 'error', err);
+        });
+    } else {
+      showAlert(true, 'warning', 'Please select current aayah and surah!');
+    }
   };
 
   return !isLoading ? (
-    <div style={{ textAlign: '-webkit-center' }}>
+    <div style={{ textAlign: '-webkit-center', paddingBottom: '24px' }}>
       <Typography variant="h6" style={{ margin: '15px' }}>
         Salam! Select your last read Surah and aayah and save your progress!
       </Typography>
@@ -176,9 +182,9 @@ export default function Tracker(props) {
           </strong>
         </p>
       ) : null}
-      <Button variant="contained" onClick={() => saveData()}>
+      <button className="raised_button" onClick={() => saveData()}>
         Save
-      </Button>
+      </button>
     </div>
   ) : (
     <p>Loading</p>

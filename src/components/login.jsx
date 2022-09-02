@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, TextField, Paper, Typography } from '@mui/material';
-import './login.css';
+import React, { useEffect, useState, useContext } from 'react';
+import { Grid, TextField, Typography } from '@mui/material';
 import loginService from '../services/login-service';
 import { useNavigate } from 'react-router-dom';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import './login.css';
+import './styles.css';
+import UserContext from './UserContext';
 
 export default function Login() {
   const [name, setName] = useState(null);
@@ -13,36 +13,27 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState(null);
   const [otpData, setOtpData] = useState(null);
   const [isLoginOtpSend, setIsLoginOtpSend] = useState(false);
-  const [snackBarOptions, setSnackBarOptions] = useState({
-    open: false,
-    severity: 'info',
-    message: null,
-  });
   const navigate = useNavigate();
   let auth = localStorage.getItem('user');
+  const showAlert = useContext(UserContext);
 
   useEffect(() => {
     if (auth) navigate('/home');
   });
-
-  const handleClick = (open, severity, message) => {
-    //severity = "error", "warning", "info", "success"
-    setSnackBarOptions({ open, severity, message });
-  };
-
-  const handleClose = () => {
-    setSnackBarOptions(false);
-  };
 
   const handleSignup = () => {
     if (validateEmail(email) && name) {
       loginService
         .signUp({ name, email })
         .then(() => {
-          alert('Signup Successful');
+          showAlert(true, 'success', 'Signup Successful');
         })
         .catch((err) => {
-          alert('Error in Signup: ' + err.response.data.message);
+          showAlert(
+            true,
+            'error',
+            'Error in Signup: ' + err.response.data.message
+          );
         });
     } else {
       handleClick(true, 'error', 'Please enter email address & Name!');
@@ -55,11 +46,15 @@ export default function Login() {
         .sendOtp({ email: loginEmail })
         .then((response) => {
           setOtpData(response.data);
-          alert('OTP sent Successful!');
+          showAlert(true, 'success', 'OTP sent Successful!');
           setIsLoginOtpSend(true);
         })
         .catch((err) => {
-          alert('Error in Signup: ' + err.response.data.message);
+          showAlert(
+            true,
+            'error',
+            'Error in Signup: ' + err.response.data.message
+          );
         });
     } else {
       handleClick(true, 'error', 'Please enter email address!');
@@ -74,12 +69,16 @@ export default function Login() {
       loginService
         .verifyOtp(otpData)
         .then((response) => {
-          alert('LOGIN Successful!');
-          localStorage.setItem('user', response.data.userId);
+          showAlert(true, 'success', 'Login Successful!');
+          localStorage.setItem('user', JSON.stringify(response.data));
           navigate('/home');
         })
         .catch((err) => {
-          alert('Error in Signup: ' + err.response.data.message);
+          showAlert(
+            true,
+            'error',
+            'Error in Signup: ' + err.response.data.message
+          );
         });
     } else {
       handleClick(true, 'error', 'Please enter 4 digit OTP!');
@@ -93,17 +92,6 @@ export default function Login() {
 
   return (
     <Grid container>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={snackBarOptions.open}
-        onClose={handleClose}
-        key={'top' + 'right'}
-      >
-        <Alert severity={snackBarOptions.severity} sx={{ width: '100%' }}>
-          {snackBarOptions.message}
-        </Alert>
-      </Snackbar>
-
       <Typography
         variant="h5"
         textAlign={'center'}
@@ -163,7 +151,7 @@ export default function Login() {
           <Grid item xs={12}>
             <button
               onClick={isLoginOtpSend ? handleVerifyOTP : handleSendOTP}
-              class="raised_button"
+              className="raised_button"
             >
               {isLoginOtpSend ? 'Verify OTP' : 'Send OTP'}
             </button>
@@ -242,7 +230,7 @@ export default function Login() {
           </Grid>
 
           <Grid item xs={12}>
-            <button onClick={handleSignup} class="raised_button">
+            <button onClick={handleSignup} className="raised_button">
               SignUp
             </button>
           </Grid>
@@ -251,7 +239,3 @@ export default function Login() {
     </Grid>
   );
 }
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
