@@ -9,6 +9,7 @@ import Login from './login';
 import UserContext from './UserContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 export default function Main() {
   const theme = createTheme({
@@ -28,6 +29,8 @@ export default function Main() {
     message: null,
   });
 
+  const [drawer, setDrawer] = useState(false);
+
   const handleClick = (open, severity, message) => {
     //severity = "error", "warning", "info", "success"
     setSnackBarOptions({ open, severity, message });
@@ -37,10 +40,29 @@ export default function Main() {
     setSnackBarOptions(false);
   };
 
+  const toggleDrawer = (open) => (event) => {
+    console.log("open  -> ", open);
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setDrawer(open);
+  };
+
   return (
     <StrictMode>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
+          <SwipeableDrawer
+            anchor={'top'}
+            open={drawer}
+            onClose={toggleDrawer(false)}
+            onOpen={toggleDrawer(true)}
+          />
           <div
             style={{
               minHeight: '100vh',
@@ -61,7 +83,7 @@ export default function Main() {
             </Snackbar>
             <UserContext.Provider value={handleClick}>
               <div>
-                <ResponsiveAppBar />
+                <ResponsiveAppBar toggleDrawer={toggleDrawer}/>
                 <Routes>
                   <Route path="*" element={<Login />} />
                   <Route index path="/login" element={<Login />} />

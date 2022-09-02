@@ -7,8 +7,9 @@ import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import './styles.css';
 
 const settings = [
   { id: 0, name: 'Logout', visible: sessionStorage.getItem('user') !== null },
@@ -19,7 +20,7 @@ const settings = [
   // },
 ];
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = (props) => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const handleOpenUserMenu = (event) => {
@@ -52,12 +53,13 @@ const ResponsiveAppBar = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography variant="h6">Quran Tracker</Typography>
+          <img style={{ width: '40px' }} src="/quran_tracker_192x192.png" />
+          <p>Quran Tracker</p>
 
           {localStorage.getItem('user') ? (
             <Box>
               <Tooltip title="More">
-                <MoreVertIcon onClick={handleOpenUserMenu} />
+                <MenuIcon onClick={handleOpenUserMenu} />
               </Tooltip>
               <Menu
                 sx={{ mt: '45px' }}

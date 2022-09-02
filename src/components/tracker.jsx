@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
 import { React, useState, useEffect, useContext } from 'react';
-import formatDate from '../date-formatter';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
 import UserContext from './UserContext';
@@ -92,7 +91,7 @@ export default function Tracker(props) {
           aayah_total: total - lastTotal,
           current_surah: currentSurah,
           current_aayah: currentAayahNo,
-          time_stamp: formatDate(new Date(), 'dd/MMM hh:mmaaa'),
+          time_stamp: new Date(),
         },
         userId: JSON.parse(localStorage.getItem('user')).userId,
       };
@@ -112,26 +111,36 @@ export default function Tracker(props) {
   };
 
   return !isLoading ? (
-    <div style={{ textAlign: '-webkit-center', paddingBottom: '24px' }}>
-      <Typography variant="h6" style={{ margin: '15px' }}>
-        Salam! Select your last read Surah and aayah and save your progress!
-      </Typography>
+    <div
+      className="font-family"
+      style={{ padding: '0px 24px 24px 24px', textAlign: 'start' }}
+    >
       {lastSurah > 0 || lastAayahNo > 0 ? (
-        <Typography variant="body1">
-          <strong>Last Aayah: </strong>
-          {lastSurah} : {lastAayahNo}{' '}
-        </Typography>
+        <p
+          className="font-family"
+          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
+        >
+          <strong className="font-family">
+            Last Aayah: {lastSurah} : {lastAayahNo}
+          </strong>
+        </p>
       ) : null}
 
       {currentSurah > 0 || currentAayahNo > 0 ? (
-        <Typography variant="body1">
-          <strong>Current Aayah: </strong>
-          {currentSurah} : {currentAayahNo}{' '}
-        </Typography>
+        <p
+          className="font-family"
+          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
+        >
+          <strong className="font-family">
+            Current Aayah: {currentSurah} : {currentAayahNo}
+          </strong>
+        </p>
       ) : null}
 
       <div style={{ marginTop: '15px' }}>
-        <Typography variant="h6">Surah List</Typography>
+        <p>
+          <strong>Surah List</strong>
+        </p>
         <select
           onChange={(event) =>
             surahSelected(event.target.options.selectedIndex)
@@ -149,7 +158,9 @@ export default function Tracker(props) {
           })}
         </select>
 
-        <Typography variant="h6">Aayah List</Typography>
+        <p>
+          <strong className="font-family">Aayah List</strong>
+        </p>
 
         <select
           onChange={(event) =>

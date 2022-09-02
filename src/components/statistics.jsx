@@ -5,6 +5,7 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
 import UserContext from './UserContext';
+import moment from 'moment';
 
 ChartJS.register(...registerables);
 
@@ -28,15 +29,13 @@ export default function Statistics(props) {
         if (res.data.data.length > 0) {
           const mainData = res.data.data;
           let data = mainData[mainData.length - 1];
-          console.log('🚀 ~ file: statistics.jsx ~ line 28 ~ data', data);
-
           let ff = [];
           let gg = [];
           mainData.forEach((bush) => {
             ff.push(bush.aayah_total);
           });
           mainData.forEach((bush) => {
-            gg.push(bush.time_stamp);
+            gg.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
           });
 
           setOldGraphData(ff);
@@ -49,7 +48,6 @@ export default function Statistics(props) {
             for (let i = 0; i <= data.current_surah - 2; i++) {
               total = total + list[i].total_verses;
             }
-
             setTotalAayahsRead(total + data.current_aayah);
           } else {
             setTotalAayahsRead(data.current_aayah);
@@ -85,7 +83,7 @@ export default function Statistics(props) {
   const deleteClicked = () => {
     dataService
       .deleteLatestEntry(JSON.parse(localStorage.getItem('user')).userId)
-      .then((res) => {
+      .then(() => {
         props.handleChangeIndex(0);
       })
       .catch((err) => {
@@ -194,7 +192,10 @@ export default function Statistics(props) {
                 <td>
                   {item}{' '}
                   {index === oldGraphData.length - 1 ? (
-                    <strong onClick={deleteClicked}>
+                    <strong
+                      style={{ cursor: 'pointer' }}
+                      onClick={deleteClicked}
+                    >
                       <i>Delete Entry</i>
                     </strong>
                   ) : null}

@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
@@ -8,10 +8,62 @@ import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
 import { Navigate } from 'react-router-dom';
+import quran from '../assets/quran.json';
+import dataService from '../services/data-service';
+import moment from 'moment';
 
 export default function App() {
   let auth = localStorage.getItem('user');
   const [value, setValue] = useState(0);
+  const [oldGraphData, setOldGraphData] = useState([]);
+  const [oldGraphTimeData, setOldGraphTimeData] = useState([]);
+  const [currentSurah, setCurrentSurah] = useState(0);
+  const [currentAayahNo, setCurrentAayahNo] = useState(0);
+  const [totalAayahsRead, setTotalAayahsRead] = useState(0);
+  const [percentage, setPercentage] = useState(0);
+  const [avgFormula, setAvgFormula] = useState(0);
+  const [list] = useState(quran);
+  const totalAayaths = 6236;
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    dataService
+      .getData(JSON.parse(localStorage.getItem('user')).userId)
+      .then((res) => {
+        if (res.data.data.length > 0) {
+          const mainData = res.data.data;
+          let data = mainData[mainData.length - 1];
+          let ff = [];
+          let gg = [];
+          mainData.forEach((bush) => {
+            ff.push(bush.aayah_total);
+            gg.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
+          });
+
+          setOldGraphData(ff);
+          setOldGraphTimeData(gg);
+          setCurrentSurah(data.current_surah);
+          setCurrentAayahNo(data.current_aayah);
+          let total = 0;
+          if (data.current_surah != 0) {
+            for (let i = 0; i <= data.current_surah - 2; i++) {
+              total = total + list[i].total_verses;
+            }
+            setTotalAayahsRead(total + data.current_aayah);
+          } else {
+            setTotalAayahsRead(data.current_aayah);
+          }
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    setPercentage(
+      parseFloat((totalAayahsRead / totalAayaths) * 100).toFixed(2)
+    );
+  }, [totalAayahsRead]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -38,13 +90,34 @@ export default function App() {
             backgroundColor: '#1976d2',
             textAlign: 'start',
             paddingLeft: '24px',
+            paddingRight: '24px',
             paddingBottom: '24px',
             color: '#FFF',
           }}
         >
-          <Typography variant="h4">
+          <p style={{ fontSize: '28px' }} variant="h4">
             Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
-          </Typography>
+          </p>
+          <p>{percentage} % completed</p>
+          <div
+            style={{
+              marginTop: '12px',
+              display: 'flex',
+              flexDirection: 'row',
+              background: '#fff',
+              borderRadius: '8px',
+              padding: '8px',
+            }}
+          >
+            <div
+              style={{
+                borderRadius: '8px',
+                backgroundColor: '#1976d2',
+                width: `${percentage}%`,
+                height: '22px',
+              }}
+            ></div>
+          </div>
         </Grid>
         <Item>
           <Tabs variant="fullWidth" value={value} onChange={handleChange}>
