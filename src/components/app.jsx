@@ -82,7 +82,6 @@ export default function App() {
         md={3}
         lg={4}
         xl={4}
-        // style={{ backgroundColor: '#262626' }}
       ></Grid>
       <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
         <Grid
@@ -161,7 +160,6 @@ export default function App() {
         md={3}
         lg={4}
         xl={4}
-        // style={{ backgroundColor: '#262626' }}
       ></Grid>
     </Grid>
   );
