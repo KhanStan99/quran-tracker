@@ -98,23 +98,34 @@ export default function App() {
           <p style={{ fontSize: '28px' }} variant="h4">
             Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
           </p>
-          <p>{percentage} % completed</p>
+          <p>You have completed {percentage}% of Quran.</p>
+          <p style={{ color: '#ff9500' }}>
+            {100 - percentage}% - {totalAayaths - totalAayahsRead} Aayahs left.
+          </p>
           <div
             style={{
               marginTop: '12px',
               display: 'flex',
               flexDirection: 'row',
-              background: '#fff',
+              borderStyle: 'solid',
               borderRadius: '8px',
-              padding: '8px',
+              padding: '4px',
             }}
           >
             <div
               style={{
-                borderRadius: '8px',
-                backgroundColor: '#1976d2',
+                borderRadius: '8px 0px 0px 8px',
+                backgroundColor: '#fff',
                 width: `${percentage}%`,
-                height: '22px',
+                height: '6px',
+              }}
+            ></div>
+            <div
+              style={{
+                borderRadius: '0px 8px 8px 0px',
+                backgroundColor: '#ff9500',
+                width: `${100 - percentage}%`,
+                height: '6px',
               }}
             ></div>
           </div>

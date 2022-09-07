@@ -143,21 +143,6 @@ export default function Statistics(props) {
             <td>{totalAayahsRead}</td>
           </tr>
           <tr>
-            <td>Percentage of Quran Completed:</td>
-            <td>{percentage}%</td>
-          </tr>
-          <tr>
-            <td>Quran Left</td>
-            <td>
-              {totalAayaths - totalAayahsRead} Aayahs |{'  '}
-              {parseFloat(
-                ((totalAayaths - totalAayahsRead) / totalAayaths) * 100
-              ).toFixed(2)}
-              %
-            </td>
-          </tr>
-
-          <tr>
             <td>Last Aayah</td>
             <td>
               {currentSurah} : {currentAayahNo}

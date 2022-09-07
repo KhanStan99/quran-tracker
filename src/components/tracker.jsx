@@ -115,29 +115,35 @@ export default function Tracker(props) {
       className="font-family"
       style={{ padding: '0px 24px 24px 24px', textAlign: 'start' }}
     >
-      {lastSurah > 0 || lastAayahNo > 0 ? (
-        <p
-          className="font-family"
-          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
-        >
-          <strong className="font-family">
-            Last Aayah: {lastSurah} : {lastAayahNo}
-          </strong>
-        </p>
-      ) : null}
+      <div
+        style={{
+          backgroundColor: '#e4e4e4',
+          marginTop: '10px',
+          padding: '12px',
+          borderRadius: '12px',
+        }}
+      >
+        {lastSurah > 0 || lastAayahNo > 0 ? (
+          <p
+            className="font-family"
+            style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
+          >
+            <strong className="font-family">Last Aayah Read:</strong>{' '}
+            {lastSurah} : {lastAayahNo}
+          </p>
+        ) : null}
 
-      {currentSurah > 0 || currentAayahNo > 0 ? (
-        <p
-          className="font-family"
-          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
-        >
-          <strong className="font-family">
-            Current Aayah: {currentSurah} : {currentAayahNo}
-          </strong>
-        </p>
-      ) : null}
-
-      <div style={{ marginTop: '15px' }}>
+        {currentSurah > 0 || currentAayahNo > 0 ? (
+          <p
+            className="font-family"
+            style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
+          >
+            <strong className="font-family">Current Aayah Read:</strong>{' '}
+            {currentSurah} : {currentAayahNo}
+          </p>
+        ) : null}
+      </div>
+      <div style={{ marginTop: '15px', textAlign: 'center' }}>
         <p>
           <strong>Surah List</strong>
         </p>
@@ -178,24 +184,24 @@ export default function Tracker(props) {
             );
           })}
         </select>
+        <h2>{aayah}</h2>
+        {aayah != '' ? (
+          <p>
+            <b>Note:</b> Aayahs mentioned here is just for reference, We
+            recommend you to read Quran from a physical book or from an
+            authenticated e-book and then save your progress here. Above shown
+            aayahs are fetched from":{' '}
+            <strong>
+              <a href="https://github.com/risan/quran-json" target="_blank">
+                risan/quran-json
+              </a>
+            </strong>
+          </p>
+        ) : null}
+        <button className="raised_button" onClick={() => saveData()}>
+          Save
+        </button>
       </div>
-      <h2>{aayah}</h2>
-      {aayah != '' ? (
-        <p>
-          <b>Note:</b> Aayahs mentioned here is just for reference, We recommend
-          you to read Quran from a physical book or from an authenticated e-book
-          and then save your progress here. Above shown aayahs are fetched
-          from":{' '}
-          <strong>
-            <a href="https://github.com/risan/quran-json" target="_blank">
-              risan/quran-json
-            </a>
-          </strong>
-        </p>
-      ) : null}
-      <button className="raised_button" onClick={() => saveData()}>
-        Save
-      </button>
     </div>
   ) : (
     <p>Loading</p>
