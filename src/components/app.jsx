@@ -30,7 +30,7 @@ export default function App() {
     dataService
       .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
-        if (res.data.data.length > 0) {
+        if (res.data.length> 0 && res.data.data.length > 0) {
           const mainData = res.data.data;
           let data = mainData[mainData.length - 1];
           let ff = [];
