@@ -25,12 +25,13 @@ export default function App() {
   const [list] = useState(quran);
   const totalAayaths = 6236;
   const [isLoading, setLoading] = useState(true);
+  const [isRestartStats, setRestartStats] = useState(true);
 
   useEffect(() => {
     dataService
       .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
-        if (res.data.length> 0 && res.data.data.length > 0) {
+        if (res.data.data.length > 0) {
           const mainData = res.data.data;
           let data = mainData[mainData.length - 1];
           let ff = [];
@@ -56,7 +57,7 @@ export default function App() {
         }
         setLoading(false);
       });
-  }, []);
+  }, isRestartStats);
 
   useEffect(() => {
     setPercentage(
@@ -66,6 +67,7 @@ export default function App() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setRestartStats(!isRestartStats);
   };
   const handleChangeIndex = (index) => {
     setValue(index);
@@ -75,14 +77,7 @@ export default function App() {
     <Navigate replace to="/login" />
   ) : (
     <Grid container direction="row">
-      <Grid
-        item
-        xs={false}
-        sm={false}
-        md={3}
-        lg={4}
-        xl={4}
-      ></Grid>
+      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
       <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
         <Grid
           style={{
@@ -97,10 +92,14 @@ export default function App() {
           <p style={{ fontSize: '28px' }} variant="h4">
             Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
           </p>
-          <p>You have completed {percentage}% of Quran.</p>
-          <p style={{ color: '#ff9500' }}>
+          <b>
+            You have completed {percentage}% of Quran - ({totalAayahsRead}{' '}
+            Aayahs).
+          </b>
+          <br />
+          <b style={{ color: '#ff9500' }}>
             {100 - percentage}% - {totalAayaths - totalAayahsRead} Aayahs left.
-          </p>
+          </b>
           <div
             style={{
               marginTop: '12px',
@@ -153,14 +152,7 @@ export default function App() {
           </SwipeableViews>
         </Item>
       </Grid>
-      <Grid
-        item
-        xs={false}
-        sm={false}
-        md={3}
-        lg={4}
-        xl={4}
-      ></Grid>
+      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
     </Grid>
   );
 }

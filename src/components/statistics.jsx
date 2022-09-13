@@ -26,7 +26,7 @@ export default function Statistics(props) {
     dataService
       .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
-        if (res.data.length > 0 && res.data.data.length > 0) {
+        if (res.data.data.length > 0) {
           const mainData = res.data.data;
           let data = mainData[mainData.length - 1];
           let ff = [];
@@ -138,16 +138,6 @@ export default function Statistics(props) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Total Aayahs Read</td>
-            <td>{totalAayahsRead}</td>
-          </tr>
-          <tr>
-            <td>Last Aayah</td>
-            <td>
-              {currentSurah} : {currentAayahNo}
-            </td>
-          </tr>
           <tr>
             <td>Average Aayah(s) read per session (Avg. of last 5 sessions)</td>
             <td>{avgFormula ? avgFormula.toFixed(2) + " Aayah's" : 'N/A'}</td>
