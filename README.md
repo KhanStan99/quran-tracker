@@ -2,7 +2,7 @@
 #  Quran Tracker App | ReactJS
 I build an app for tracking Quran progress.
 
-> __Login is available now!__
+> __Login is available now! : https://quran-read-tracker.web.app__
 
 ![](https://i.ibb.co/yqddd07/main.jpg)
 
