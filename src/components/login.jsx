@@ -213,6 +213,8 @@ export default function Login() {
                 disabled={!isLoginOtpSend}
                 required
                 fullWidth
+                type="number"
+                
                 label="OTP"
                 variant="filled"
                 onChange={(e) => setOtp(e.target.value)}
