@@ -198,6 +198,7 @@ export default function Login() {
                 required
                 fullWidth
                 label="Email"
+                input="email"
                 onChange={(e) => setLoginEmail(e.target.value)}
                 error={loginEmail && !validateEmail(loginEmail)}
                 variant="filled"
@@ -213,8 +214,7 @@ export default function Login() {
                 disabled={!isLoginOtpSend}
                 required
                 fullWidth
-                type="number"
-                
+                input="number"
                 label="OTP"
                 variant="filled"
                 onChange={(e) => setOtp(e.target.value)}

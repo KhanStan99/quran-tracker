@@ -27,30 +27,30 @@ export default function Statistics(props) {
       .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
         if (res.data.data.length > 0) {
-          const mainData = res.data.data;
-          let data = mainData[mainData.length - 1];
-          let ff = [];
-          let gg = [];
-          mainData.forEach((bush) => {
-            ff.push(bush.aayah_total);
+          const readingResponseItem = res.data.data;
+          let latestReadingItem = readingResponseItem[readingResponseItem.length - 1];
+          let readAayashList = [];
+          let readAayahTimestampList = [];
+          readingResponseItem.forEach((bush) => {
+            readAayashList.push(bush.aayah_total);
           });
-          mainData.forEach((bush) => {
-            gg.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
+          readingResponseItem.forEach((bush) => {
+            readAayahTimestampList.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
           });
 
-          setOldGraphData(ff);
-          setOldGraphTimeData(gg);
+          setOldGraphData(readAayashList);
+          setOldGraphTimeData(readAayahTimestampList);
 
-          setCurrentSurah(data.current_surah);
-          setCurrentAayahNo(data.current_aayah);
+          setCurrentSurah(latestReadingItem.current_surah);
+          setCurrentAayahNo(latestReadingItem.current_aayah);
           let total = 0;
-          if (data.current_surah != 0) {
-            for (let i = 0; i <= data.current_surah - 2; i++) {
+          if (latestReadingItem.current_surah != 0) {
+            for (let i = 0; i <= latestReadingItem.current_surah - 2; i++) {
               total = total + list[i].total_verses;
             }
-            setTotalAayahsRead(total + data.current_aayah);
+            setTotalAayahsRead(total + latestReadingItem.current_aayah);
           } else {
-            setTotalAayahsRead(data.current_aayah);
+            setTotalAayahsRead(latestReadingItem.current_aayah);
           }
         }
         setLoading(false);
