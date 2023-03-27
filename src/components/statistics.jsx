@@ -11,7 +11,9 @@ ChartJS.register(...registerables);
 
 export default function Statistics(props) {
   const [oldGraphData, setOldGraphData] = useState([]);
-  const [oldGraphTimeData, setOldGraphTimeData] = useState([]);
+  const [graphHistory, setGraphHistory] = useState([]);
+  const [listHistory, setListHistory] = useState([]);
+  const [listHistoryAayah, setListHistoryAayah] = useState([]);
   const [currentSurah, setCurrentSurah] = useState(0);
   const [currentAayahNo, setCurrentAayahNo] = useState(0);
   const [totalAayahsRead, setTotalAayahsRead] = useState(0);
@@ -28,21 +30,28 @@ export default function Statistics(props) {
       .then((res) => {
         if (res.data.data.length > 0) {
           const readingResponseItem = res.data.data;
-          let latestReadingItem = readingResponseItem[readingResponseItem.length - 1];
+          let latestReadingItem =
+            readingResponseItem[readingResponseItem.length - 1];
           let readAayashList = [];
-          let readAayahTimestampList = [];
+          let graphHistory = [];
+          let listHistory = [];
           readingResponseItem.forEach((bush) => {
             readAayashList.push(bush.aayah_total);
           });
           readingResponseItem.forEach((bush) => {
-            readAayahTimestampList.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
+            graphHistory.push(moment(bush.time_stamp).format('DD/MM hh:mm a'));
+            listHistory.push(moment(bush.time_stamp).format('DD/MM - hh:mm a'));
           });
 
           setOldGraphData(readAayashList);
-          setOldGraphTimeData(readAayahTimestampList);
+          setGraphHistory(graphHistory);
+
+          setListHistory(listHistory.reverse());
+          setListHistoryAayah(readAayashList.reverse());
 
           setCurrentSurah(latestReadingItem.current_surah);
           setCurrentAayahNo(latestReadingItem.current_aayah);
+
           let total = 0;
           if (latestReadingItem.current_surah != 0) {
             for (let i = 0; i <= latestReadingItem.current_surah - 2; i++) {
@@ -72,13 +81,13 @@ export default function Statistics(props) {
 
     if (historyLength > 5) {
       latest5 = oldGraphData.slice(
-        oldGraphData.length - 5,
-        oldGraphData.length
+        0,
+        5
       );
     }
     let sum = latest5.reduce((sum, nextNum) => sum + nextNum, 0);
     setAvgFormula(sum / (historyLength > 5 ? 5 : historyLength));
-  }, [oldGraphData]);
+  }, oldGraphData);
 
   const deleteClicked = () => {
     dataService
@@ -105,12 +114,9 @@ export default function Statistics(props) {
   };
   const data = {
     labels:
-      oldGraphTimeData.length > 5
-        ? oldGraphTimeData.slice(
-            oldGraphTimeData.length - 5,
-            oldGraphTimeData.length
-          )
-        : oldGraphTimeData,
+      graphHistory.length > 5
+        ? graphHistory.slice(graphHistory.length - 5, graphHistory.length)
+        : graphHistory,
     datasets: [
       {
         label: 'Checkpoint',
@@ -160,18 +166,18 @@ export default function Statistics(props) {
           </tr>
         </thead>
         <tbody>
-          {oldGraphData.map((item, index) => {
+          {listHistory.map((item, index) => {
             return (
               <tr key={index}>
-                <td>{oldGraphTimeData[index]}</td>
+                <td>{item}</td>
                 <td>
-                  {item}{' '}
-                  {index === oldGraphData.length - 1 ? (
+                  {listHistoryAayah[index]}{' '}
+                  {index === 0 ? (
                     <strong
                       style={{ cursor: 'pointer' }}
                       onClick={deleteClicked}
                     >
-                      <i>Delete Entry</i>
+                      <i> - Delete Entry</i>
                     </strong>
                   ) : null}
                 </td>

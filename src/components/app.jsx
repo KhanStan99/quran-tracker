@@ -93,8 +93,7 @@ export default function App() {
             Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
           </p>
           <b>
-            You have completed {percentage}% of Quran - ({totalAayahsRead}{' '}
-            Aayahs).
+            {percentage}% - {totalAayahsRead} Aayahs Completed.
           </b>
           <br />
           <b style={{ color: '#ff9500' }}>
