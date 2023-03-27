@@ -39,7 +39,7 @@ export default function Statistics(props) {
             readAayashList.push(bush.aayah_total);
           });
           readingResponseItem.forEach((bush) => {
-            graphHistory.push(moment(bush.time_stamp).format('DD/MM hh:mm a'));
+            graphHistory.push(moment(bush.time_stamp).format('DD/MM'));
             listHistory.push(moment(bush.time_stamp).format('DD/MM - hh:mm a'));
           });
 
