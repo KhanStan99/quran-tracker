@@ -80,14 +80,11 @@ export default function Statistics(props) {
     let latest5 = oldGraphData;
 
     if (historyLength > 5) {
-      latest5 = oldGraphData.slice(
-        0,
-        5
-      );
+      latest5 = oldGraphData.slice(0, 5);
     }
     let sum = latest5.reduce((sum, nextNum) => sum + nextNum, 0);
     setAvgFormula(sum / (historyLength > 5 ? 5 : historyLength));
-  }, oldGraphData);
+  }, [oldGraphData]);
 
   const deleteClicked = () => {
     dataService
