@@ -7,36 +7,23 @@ import './styles.css';
 
 export default function Tracker(props) {
   const [lastSurah, setLastSurah] = useState(0);
-  const [lastAayahNo, setLastAayahNo] = useState(0);
+  const [lastVerseNo, setLastVerseNo] = useState(0);
 
-  const [currentAayahNo, setCurrentAayahNo] = useState(null);
+  const [currentVerseNo, setCurrentVerseNo] = useState(null);
   const [currentSurah, setCurrentSurah] = useState(null);
 
-  const [totalAayahsRead, setTotalAayahsRead] = useState(0);
   const [list] = useState(quran);
-  const [aayah, setAayah] = useState('');
+  const [verse, setVerse] = useState('');
   const [versesList, setVersesList] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const showAlert = useContext(UserContext);
 
   useEffect(() => {
-    dataService
-      .getData(JSON.parse(localStorage.getItem('user')).userId)
-      .then((res) => {
-        if (res.data.data.length > 0) {
-          const mainData = res.data.data;
-          let data = mainData[mainData.length - 1];
-
-          setLastSurah(data.current_surah);
-          setLastAayahNo(data.current_aayah);
-          setTotalAayahsRead(data.total_read);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        showAlert(true, 'error', JSON.stringify(err));
-      });
-  }, []);
+    if (props.list.length > 0) {
+      let data = props.list[props.list.length - 1];
+      setLastSurah(data.current_surah);
+      setLastVerseNo(data.current_aayah);
+    }
+  }, [props.list]);
 
   useEffect(() => {
     setVersesList(lastSurah ? list[lastSurah - 1].verses : []);
@@ -46,26 +33,26 @@ export default function Tracker(props) {
     setCurrentSurah(e);
     if (e !== 0) {
       setVersesList(list[e - 1].verses);
-      setCurrentAayahNo(0);
-      setAayah('');
+      setCurrentVerseNo(0);
+      setVerse('');
     } else {
       setCurrentSurah(0);
       setVersesList([]);
-      setAayah('');
+      setVerse('');
     }
   };
 
-  const aayahSelected = (e) => {
-    setCurrentAayahNo(e);
+  const verseSelected = (e) => {
+    setCurrentVerseNo(e);
     if (e !== 0) {
-      setAayah(versesList[e - 1].text);
+      setVerse(versesList[e - 1].text);
     } else {
-      setAayah('');
+      setVerse('');
     }
   };
 
   const saveData = () => {
-    if (currentSurah && currentAayahNo) {
+    if (currentSurah && currentVerseNo) {
       let total = 0;
       let lastTotal = 0;
 
@@ -73,24 +60,24 @@ export default function Tracker(props) {
         for (let i = 0; i <= lastSurah - 2; i++) {
           lastTotal = lastTotal + list[i].total_verses;
         }
-        lastTotal = lastTotal + lastAayahNo;
+        lastTotal = lastTotal + lastVerseNo;
       } else {
-        lastTotal = lastAayahNo;
+        lastTotal = lastVerseNo;
       }
 
       if (currentSurah != 0) {
         for (let i = 0; i <= currentSurah - 2; i++) {
           total = total + list[i].total_verses;
         }
-        total = total + currentAayahNo;
+        total = total + currentVerseNo;
       } else {
-        total = currentAayahNo;
+        total = currentVerseNo;
       }
       let data = {
         data: {
           aayah_total: total - lastTotal,
           current_surah: currentSurah,
-          current_aayah: currentAayahNo,
+          current_aayah: currentVerseNo,
           time_stamp: new Date(),
         },
         userId: JSON.parse(localStorage.getItem('user')).userId,
@@ -106,11 +93,11 @@ export default function Tracker(props) {
           showAlert(true, 'error', err);
         });
     } else {
-      showAlert(true, 'warning', 'Please select current aayah and surah!');
+      showAlert(true, 'warning', 'Please select current verse and surah!');
     }
   };
 
-  return !isLoading ? (
+  return props.list.length > 0 ? (
     <div
       className="font-family"
       style={{ padding: '0px 24px 24px 24px', textAlign: 'start' }}
@@ -123,23 +110,23 @@ export default function Tracker(props) {
           borderRadius: '12px',
         }}
       >
-        {lastSurah > 0 || lastAayahNo > 0 ? (
+        {lastSurah > 0 || lastVerseNo > 0 ? (
           <p
             className="font-family"
             style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
           >
             <strong className="font-family">Last Aayah Read:</strong>{' '}
-            {lastSurah} : {lastAayahNo}
+            {lastSurah} : {lastVerseNo}
           </p>
         ) : null}
 
-        {currentSurah > 0 || currentAayahNo > 0 ? (
+        {currentSurah > 0 || currentVerseNo > 0 ? (
           <p
             className="font-family"
             style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
           >
             <strong className="font-family">Current Aayah Read:</strong>{' '}
-            {currentSurah} : {currentAayahNo}
+            {currentSurah} : {currentVerseNo}
           </p>
         ) : null}
       </div>
@@ -148,16 +135,17 @@ export default function Tracker(props) {
           <strong>Surah List</strong>
         </p>
         <select
+          value={lastSurah - 1}
           onChange={(event) =>
             surahSelected(event.target.options.selectedIndex)
           }
         >
-          <option key="0" value={null}>
+          <option key="0" value={0}>
             -- Select Current Surah --
           </option>
           {list.map((item, index) => {
             return (
-              <option key={item.id} value={item.verses}>
+              <option key={item.id} value={index}>
                 {index + 1}. {item.transliteration}
               </option>
             );
@@ -169,8 +157,9 @@ export default function Tracker(props) {
         </p>
 
         <select
+          value={lastVerseNo - 1}
           onChange={(event) =>
-            aayahSelected(event.target.options.selectedIndex)
+            verseSelected(event.target.options.selectedIndex)
           }
         >
           <option key="0" value={null}>
@@ -178,14 +167,14 @@ export default function Tracker(props) {
           </option>
           {versesList.map((item, index) => {
             return (
-              <option key={index}>
+              <option key={index} value={index}>
                 {item.text.slice(0, 25)}... {index + 1}
               </option>
             );
           })}
         </select>
-        <h2>{aayah}</h2>
-        {aayah != '' ? (
+        <h2>{verse}</h2>
+        {verse != '' ? (
           <p>
             <b>Note:</b> Aayahs mentioned here is just for reference, We
             recommend you to read Quran from a physical book or from an

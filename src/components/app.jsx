@@ -10,21 +10,17 @@ import LinksComponent from './about-dev';
 import { Navigate } from 'react-router-dom';
 import quran from '../assets/quran.json';
 import dataService from '../services/data-service';
-import moment from 'moment';
 
 export default function App() {
   let auth = localStorage.getItem('user');
+  const [mainList, setMainList] = useState([]);
   const [value, setValue] = useState(0);
-  const [oldGraphData, setOldGraphData] = useState([]);
-  const [oldGraphTimeData, setOldGraphTimeData] = useState([]);
-  const [currentSurah, setCurrentSurah] = useState(0);
-  const [currentAayahNo, setCurrentAayahNo] = useState(0);
-  const [totalAayahsRead, setTotalAayahsRead] = useState(0);
+  const [totalVersesRead, setTotalVersesRead] = useState(0);
   const [percentage, setPercentage] = useState(0);
-  const [avgFormula, setAvgFormula] = useState(0);
+
   const [list] = useState(quran);
-  const totalAayaths = 6236;
-  const [isLoading, setLoading] = useState(true);
+  const totalVerses = 6236;
+
   const [isRestartStats, setRestartStats] = useState(true);
 
   useEffect(() => {
@@ -33,37 +29,27 @@ export default function App() {
       .then((res) => {
         if (res.data.data.length > 0) {
           const mainData = res.data.data;
-          let data = mainData[mainData.length - 1];
-          let ff = [];
-          let gg = [];
-          mainData.forEach((bush) => {
-            ff.push(bush.aayah_total);
-            gg.push(moment(bush.time_stamp).format('DD-MM-YY HH:MM'));
-          });
+          setMainList(mainData);
+          let latestEntry = mainData[mainData.length - 1];
 
-          setOldGraphData(ff);
-          setOldGraphTimeData(gg);
-          setCurrentSurah(data.current_surah);
-          setCurrentAayahNo(data.current_aayah);
           let total = 0;
-          if (data.current_surah != 0) {
-            for (let i = 0; i <= data.current_surah - 2; i++) {
+          if (latestEntry.current_surah != 0) {
+            for (let i = 0; i <= latestEntry.current_surah - 2; i++) {
               total = total + list[i].total_verses;
             }
-            setTotalAayahsRead(total + data.current_aayah);
+            setTotalVersesRead(total + latestEntry.current_aayah);
           } else {
-            setTotalAayahsRead(data.current_aayah);
+            setTotalVersesRead(latestEntry.current_aayah);
           }
         }
-        setLoading(false);
       });
-  }, isRestartStats);
+  }, []);
+
+  useEffect(() => {}, [mainList]);
 
   useEffect(() => {
-    setPercentage(
-      parseFloat((totalAayahsRead / totalAayaths) * 100).toFixed(2)
-    );
-  }, [totalAayahsRead]);
+    setPercentage(parseFloat((totalVersesRead / totalVerses) * 100).toFixed(2));
+  }, [totalVersesRead]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -93,11 +79,11 @@ export default function App() {
             Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
           </p>
           <b>
-            {percentage}% - {totalAayahsRead} Aayahs Completed.
+            {percentage}% - {totalVersesRead} Verses Completed.
           </b>
           <br />
           <b style={{ color: '#ff9500' }}>
-            {100 - percentage}% - {totalAayaths - totalAayahsRead} Aayahs left.
+            {100 - percentage}% - {totalVerses - totalVersesRead} Verses left.
           </b>
           <div
             style={{
@@ -140,10 +126,13 @@ export default function App() {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0}>
-              <Tracker handleChangeIndex={handleChangeIndex} />
+              <Tracker handleChangeIndex={handleChangeIndex} list={mainList} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Statistics handleChangeIndex={handleChangeIndex} />
+              <Statistics
+                handleChangeIndex={handleChangeIndex}
+                list={mainList}
+              />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <LinksComponent />
