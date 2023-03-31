@@ -100,7 +100,7 @@ export default function Statistics(props) {
     ],
   };
 
-  return props.list.length > 0 ? (
+  return (
     <div style={{ textAlign: '-webkit-center' }}>
       <Line options={options} data={data} />
       <table className="progress">
@@ -154,7 +154,5 @@ export default function Statistics(props) {
         </tbody>
       </table>
     </div>
-  ) : (
-    <p>Loading</p>
   );
 }

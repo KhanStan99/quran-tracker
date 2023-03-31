@@ -97,7 +97,7 @@ export default function Tracker(props) {
     }
   };
 
-  return props.list.length > 0 ? (
+  return (
     <div
       className="font-family"
       style={{ padding: '0px 24px 24px 24px', textAlign: 'start' }}
@@ -192,7 +192,5 @@ export default function Tracker(props) {
         </button>
       </div>
     </div>
-  ) : (
-    <p>Loading</p>
   );
 }
