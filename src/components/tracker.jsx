@@ -135,7 +135,6 @@ export default function Tracker(props) {
           <strong>Surah List</strong>
         </p>
         <select
-          value={lastSurah - 1}
           onChange={(event) =>
             surahSelected(event.target.options.selectedIndex)
           }
@@ -157,7 +156,6 @@ export default function Tracker(props) {
         </p>
 
         <select
-          value={lastVerseNo - 1}
           onChange={(event) =>
             verseSelected(event.target.options.selectedIndex)
           }
