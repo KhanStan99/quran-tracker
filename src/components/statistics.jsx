@@ -23,7 +23,6 @@ export default function Statistics(props) {
   useEffect(() => {
     if (props.list.length > 0) {
       let readingResponseItem = props.list;
-      readingResponseItem = readingResponseItem.reverse();
       let latestReadingItem = readingResponseItem[0];
       let readVersusList = [];
       let graphHistory = [];
@@ -61,6 +60,7 @@ export default function Statistics(props) {
     if (historyLength > 5) {
       latest5 = oldGraphData.slice(0, 5);
     }
+
     let sum = latest5.reduce((sum, nextNum) => sum + nextNum, 0);
     setAvgFormula(sum / (historyLength > 5 ? 5 : historyLength));
   }, [oldGraphData]);
@@ -89,11 +89,17 @@ export default function Statistics(props) {
     },
   };
   const data = {
-    labels: graphHistory.length > 5 ? graphHistory.slice(0, 5) : graphHistory,
+    labels:
+      graphHistory.length > 5
+        ? graphHistory.slice(0, 5).reverse()
+        : graphHistory.slice(0, oldGraphData.length).reverse(),
     datasets: [
       {
         label: 'Checkpoint',
-        data: oldGraphData.length > 5 ? oldGraphData.slice(0, 5) : oldGraphData,
+        data:
+          oldGraphData.length > 5
+            ? oldGraphData.slice(0, 5).reverse()
+            : oldGraphData.slice(0, oldGraphData.length).reverse(),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },

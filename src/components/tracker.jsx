@@ -19,7 +19,7 @@ export default function Tracker(props) {
 
   useEffect(() => {
     if (props.list.length > 0) {
-      let data = props.list[props.list.length - 1];
+      let data = props.list[0];
       setLastSurah(data.current_surah);
       setLastVerseNo(data.current_aayah);
     }
