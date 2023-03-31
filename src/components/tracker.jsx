@@ -110,15 +110,13 @@ export default function Tracker(props) {
           borderRadius: '12px',
         }}
       >
-        {lastSurah > 0 || lastVerseNo > 0 ? (
-          <p
-            className="font-family"
-            style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
-          >
-            <strong className="font-family">Last Aayah Read:</strong>{' '}
-            {lastSurah} : {lastVerseNo}
-          </p>
-        ) : null}
+        <p
+          className="font-family"
+          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
+        >
+          <strong className="font-family">Last Aayah Read:</strong> {lastSurah}{' '}
+          : {lastVerseNo}
+        </p>
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
           <p

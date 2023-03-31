@@ -30,7 +30,7 @@ export default function App() {
         if (res.data.length > 0) {
           const mainData = res.data;
           setMainList(mainData);
-          let latestEntry = mainData[mainData.length - 1];
+          let latestEntry = mainData[0];
 
           let total = 0;
           if (latestEntry.current_surah != 0) {
