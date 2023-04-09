@@ -24,6 +24,24 @@ export default function App() {
   const [isRestartStats, setRestartStats] = useState(true);
 
   useEffect(() => {
+    getDataForUser();
+  }, []);
+
+  useEffect(() => {}, [mainList]);
+
+  useEffect(() => {
+    setPercentage(parseFloat((totalVersesRead / totalVerses) * 100).toFixed(2));
+  }, [totalVersesRead]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    setRestartStats(!isRestartStats);
+  };
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  };
+
+  const getDataForUser = (shift = false) => {
     dataService
       .getData(JSON.parse(localStorage.getItem('user')).userId)
       .then((res) => {
@@ -41,22 +59,11 @@ export default function App() {
           } else {
             setTotalVersesRead(latestEntry.current_aayah);
           }
+          if (shift) {
+            handleChangeIndex(1);
+          }
         }
       });
-  }, []);
-
-  useEffect(() => {}, [mainList]);
-
-  useEffect(() => {
-    setPercentage(parseFloat((totalVersesRead / totalVerses) * 100).toFixed(2));
-  }, [totalVersesRead]);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setRestartStats(!isRestartStats);
-  };
-  const handleChangeIndex = (index) => {
-    setValue(index);
   };
 
   return !auth ? (
@@ -126,7 +133,11 @@ export default function App() {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0}>
-              <Tracker handleChangeIndex={handleChangeIndex} list={mainList} />
+              <Tracker
+                handleChangeIndex={handleChangeIndex}
+                list={mainList}
+                getDataForUser={getDataForUser}
+              />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Statistics

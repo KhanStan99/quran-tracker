@@ -87,7 +87,7 @@ export default function Tracker(props) {
         .updateData(data)
         .then(() => {
           showAlert(true, 'success', 'Bookmark Checkpoint Updated!');
-          props.handleChangeIndex(1);
+          props.getDataForUser(true);
         })
         .catch((err) => {
           showAlert(true, 'error', err);

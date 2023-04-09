@@ -18,6 +18,7 @@ export default function Statistics(props) {
   const [avgFormula, setAvgFormula] = useState(0);
   const [list] = useState(quran);
   const totalVerses = 6236;
+  const countFrom = 7;
   const showAlert = useContext(UserContext);
 
   useEffect(() => {
@@ -57,12 +58,14 @@ export default function Statistics(props) {
     let historyLength = oldGraphData.length;
     let latest5 = oldGraphData;
 
-    if (historyLength > 5) {
-      latest5 = oldGraphData.slice(0, 5);
+    if (historyLength > countFrom) {
+      latest5 = oldGraphData.slice(0, countFrom);
     }
 
     let sum = latest5.reduce((sum, nextNum) => sum + nextNum, 0);
-    setAvgFormula(sum / (historyLength > 5 ? 5 : historyLength));
+    setAvgFormula(
+      sum / (historyLength > countFrom ? countFrom : historyLength)
+    );
   }, [oldGraphData]);
 
   const deleteClicked = () => {
@@ -76,34 +79,42 @@ export default function Statistics(props) {
       });
   };
 
+  const data = {
+    labels:
+      graphHistory.length > countFrom
+        ? graphHistory.slice(0, countFrom).reverse()
+        : graphHistory.slice(0, oldGraphData.length).reverse(),
+    datasets: [
+      {
+        label: '# of Versus',
+        data:
+          oldGraphData.length > countFrom
+            ? oldGraphData.slice(0, countFrom).reverse()
+            : oldGraphData.slice(0, oldGraphData.length).reverse(),
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
   const options = {
     responsive: true,
+    scales: {
+      y: {
+        min: Math.min(...data.datasets[0].data) - 10,
+        stepSize: 20,
+      },
+      x: {},
+    },
     plugins: {
       legend: {
         position: 'top',
       },
       title: {
         display: true,
-        text: 'Graph view of verses read per session (Showing last 5 sessions)',
+        text: `Graph view of verses read per session (Showing last ${countFrom} sessions)`,
       },
     },
-  };
-  const data = {
-    labels:
-      graphHistory.length > 5
-        ? graphHistory.slice(0, 5).reverse()
-        : graphHistory.slice(0, oldGraphData.length).reverse(),
-    datasets: [
-      {
-        label: 'Checkpoint',
-        data:
-          oldGraphData.length > 5
-            ? oldGraphData.slice(0, 5).reverse()
-            : oldGraphData.slice(0, oldGraphData.length).reverse(),
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-    ],
   };
 
   return (
@@ -118,7 +129,10 @@ export default function Statistics(props) {
         </thead>
         <tbody>
           <tr>
-            <td>Average verses read per session (Showing last 5 sessions)</td>
+            <td>
+              Average verses read per session (Showing last {countFrom}{' '}
+              sessions)
+            </td>
             <td>{avgFormula ? avgFormula.toFixed(2) + ' Verses' : 'N/A'}</td>
           </tr>
           <tr>

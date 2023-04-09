@@ -41,7 +41,6 @@ export default function Main() {
   };
 
   const toggleDrawer = (open) => (event) => {
-    console.log("open  -> ", open);
     if (
       event &&
       event.type === 'keydown' &&
