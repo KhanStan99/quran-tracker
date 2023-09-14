@@ -1,15 +1,16 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
+import History from './history';
 import Tracker from './tracker';
-import { Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Button, Grid, Tab, Tabs } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
 import { Navigate } from 'react-router-dom';
 import quran from '../assets/quran.json';
-import dataService from '../services/data-service';
+import { getData, saveHistoryData } from '../services/data-service';
 
 export default function App() {
   let auth = localStorage.getItem('user');
@@ -42,28 +43,34 @@ export default function App() {
   };
 
   const getDataForUser = (shift = false) => {
-    dataService
-      .getData(JSON.parse(localStorage.getItem('user')).userId)
-      .then((res) => {
-        if (res.data.length > 0) {
-          const mainData = res.data;
-          setMainList(mainData);
-          let latestEntry = mainData[0];
+    getData(JSON.parse(localStorage.getItem('user')).userId).then((res) => {
+      if (res.data.length > 0) {
+        const mainData = res.data;
+        setMainList(mainData);
+        let latestEntry = mainData[0];
 
-          let total = 0;
-          if (latestEntry.current_surah != 0) {
-            for (let i = 0; i <= latestEntry.current_surah - 2; i++) {
-              total = total + list[i].total_verses;
-            }
-            setTotalVersesRead(total + latestEntry.current_aayah);
-          } else {
-            setTotalVersesRead(latestEntry.current_aayah);
+        let total = 0;
+        if (latestEntry.current_surah != 0) {
+          for (let i = 0; i <= latestEntry.current_surah - 2; i++) {
+            total = total + list[i].total_verses;
           }
-          if (shift) {
-            handleChangeIndex(1);
-          }
+          setTotalVersesRead(total + latestEntry.current_aayah);
+        } else {
+          setTotalVersesRead(latestEntry.current_aayah);
         }
-      });
+        if (shift) {
+          handleChangeIndex(1);
+        }
+      }
+    });
+  };
+
+  const saveHistoryRestart = () => {
+    saveHistoryData({
+      user: JSON.parse(localStorage.getItem('user')).userId,
+      startAt: mainList[0].time_stamp,
+      endAt: mainList[mainList.length - 1].time_stamp,
+    });
   };
 
   return !auth ? (
@@ -119,11 +126,27 @@ export default function App() {
               }}
             ></div>
           </div>
+          {percentage >= 100 ? (
+            <div>
+              <p>
+                MashaAllah, Congratulation on completing Quran. Please click the
+                below button and restart Quran again
+              </p>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => saveHistoryRestart()}
+              >
+                Save & Restart
+              </Button>
+            </div>
+          ) : null}
         </Grid>
         <Item>
           <Tabs variant="fullWidth" value={value} onChange={handleChange}>
             <Tab label="Tracker" />
             <Tab label="Statistics" />
+            <Tab label="History" />
             <Tab label="About Dev" />
           </Tabs>
 
@@ -146,6 +169,11 @@ export default function App() {
               />
             </TabPanel>
             <TabPanel value={value} index={2}>
+              <History
+                handleChangeIndex={handleChangeIndex}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
               <LinksComponent />
             </TabPanel>
           </SwipeableViews>
