@@ -65,12 +65,13 @@ export default function App() {
     });
   };
 
-  const saveHistoryRestart = () => {
-    saveHistoryData({
+  const saveHistoryRestart = async () => {
+    await saveHistoryData({
       user: JSON.parse(localStorage.getItem('user')).userId,
-      startAt: mainList[0].time_stamp,
-      endAt: mainList[mainList.length - 1].time_stamp,
+      startAt: mainList[mainList.length - 1].time_stamp,
+      endAt: mainList[0].time_stamp,
     });
+    window.location.reload();
   };
 
   return !auth ? (
@@ -169,9 +170,7 @@ export default function App() {
               />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <History
-                handleChangeIndex={handleChangeIndex}
-              />
+              <History handleChangeIndex={handleChangeIndex} />
             </TabPanel>
             <TabPanel value={value} index={3}>
               <LinksComponent />
