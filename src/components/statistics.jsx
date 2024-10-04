@@ -5,6 +5,19 @@ import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
 import UserContext from './UserContext';
 import moment from 'moment';
+import {
+  Button,
+  Grid2,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import { DeleteForever } from '@mui/icons-material';
 
 ChartJS.register(...registerables);
 
@@ -98,14 +111,6 @@ export default function Statistics(props) {
   };
 
   const options = {
-    responsive: true,
-    scales: {
-      y: {
-        min: Math.min(...data.datasets[0].data) - 10,
-        stepSize: 20,
-      },
-      x: {},
-    },
     plugins: {
       legend: {
         position: 'top',
@@ -113,66 +118,124 @@ export default function Statistics(props) {
       title: {
         display: true,
         text: `Graph view of verses read per session (Showing last ${countFrom} sessions)`,
+        font: {
+          size: 16,
+        },
       },
     },
   };
 
   return (
-    <div style={{ textAlign: '-webkit-center' }}>
+    <Grid2
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      padding={1}
+      container
+      spacing={2}
+    >
       <Line options={options} data={data} />
-      <table className="progress">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Statistics</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Average verses read per session (Showing last {countFrom}{' '}
-              sessions)
-            </td>
-            <td>{avgFormula ? avgFormula.toFixed(2) + ' Verses' : 'N/A'}</td>
-          </tr>
-          <tr>
-            <td>Sessions to Complete (Based on Avg.)</td>
-            <td>
-              {avgFormula
-                ? ((totalVerses - totalVersesRead) / avgFormula).toFixed(2)
-                : 'N/A'}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table className="progress">
-        <thead>
-          <tr>
-            <th>Entry</th>
-            <th>No. of Aayahs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listHistory.map((item, index) => {
-            return (
-              <tr key={index}>
-                <td>{item}</td>
-                <td>
-                  {listHistoryVerse[index]}{' '}
-                  {index === 0 ? (
-                    <strong
-                      style={{ cursor: 'pointer' }}
-                      onClick={deleteClicked}
+
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Category</TableCell>
+              <TableCell align="right">Statistics</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            <TableRow
+              key={1}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Average verses read per session (Showing last {countFrom}{' '}
+                sessions)
+              </TableCell>
+              <TableCell align="right">
+                {avgFormula ? avgFormula.toFixed(2) + ' Verses' : 'N/A'}
+              </TableCell>
+            </TableRow>
+            <TableRow
+              key={1}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Sessions to Complete (Based on Avg.)
+              </TableCell>
+              <TableCell align="right">
+                {avgFormula
+                  ? ((totalVerses - totalVersesRead) / avgFormula).toFixed(2)
+                  : 'N/A'}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Entry</TableCell>
+              <TableCell align="right">No. of Aayahs</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {listHistory.map((item, index) => {
+              return (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {item}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Grid2
+                      container
+                      display={'flex'}
+                      justifyContent={'space-evenly'}
+                      alignItems={'center'}
                     >
-                      <i> - Delete Entry</i>
-                    </strong>
-                  ) : null}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                      <Typography variant="body1">
+                        {listHistoryVerse[index]}{' '}
+                      </Typography>
+
+                      {index === 0 && (
+                        <Button
+                          variant="contained"
+                          onClick={deleteClicked}
+                          startIcon={<DeleteForever />}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </Grid2>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+
+            <TableRow
+              key={1}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Sessions to Complete (Based on Avg.)
+              </TableCell>
+              <TableCell align="right">
+                {avgFormula
+                  ? ((totalVerses - totalVersesRead) / avgFormula).toFixed(2)
+                  : 'N/A'}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid2>
   );
 }

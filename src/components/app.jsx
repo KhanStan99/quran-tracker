@@ -4,13 +4,14 @@ import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
 import History from './history';
 import Tracker from './tracker';
-import { Button, Grid2, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Grid2, Tab, Tabs, Typography } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
 import { Navigate } from 'react-router-dom';
 import quran from '../assets/quran.json';
 import { getData, saveHistoryData } from '../services/data-service';
+import { formatNumber } from '../utils/text-utils';
 
 export default function App() {
   let auth = localStorage.getItem('user');
@@ -23,12 +24,9 @@ export default function App() {
   const totalVerses = 6236;
 
   const [isRestartStats, setRestartStats] = useState(true);
-
   useEffect(() => {
     getDataForUser();
   }, []);
-
-  useEffect(() => {}, [mainList]);
 
   useEffect(() => {
     setPercentage(parseFloat((totalVersesRead / totalVerses) * 100).toFixed(2));
@@ -79,68 +77,65 @@ export default function App() {
   ) : (
     <Grid2 flexDirection="column">
       <Grid2
-        style={{
-          backgroundColor: '#1976d2',
-          textAlign: 'start',
-          paddingLeft: '24px',
-          paddingRight: '24px',
-          paddingBottom: '24px',
-          color: '#FFF',
+        container
+        spacing={1}
+        display={'flex'}
+        flexDirection={'column'}
+        sx={{
+          backgroundColor: 'primary.main',
+          textAlign: 'center',
+          color: 'white',
         }}
+        padding={2}
       >
-        <Typography style={{ fontSize: '28px' }} variant="h4">
+        <Typography variant="h4">
           Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
         </Typography>
-        <Typography>
-          <b>
-            {percentage}% - {totalVersesRead} Verses Completed.
-          </b>
-          <br />
-          <b style={{ color: '#ff9500' }}>
-            {100 - percentage}% - {totalVerses - totalVersesRead} Verses left.
-          </b>
-        </Typography>
-        <div
-          style={{
-            marginTop: '12px',
-            display: 'flex',
-            flexDirection: 'row',
-            borderStyle: 'solid',
-            borderRadius: '8px',
-            padding: '4px',
-          }}
+
+        <Box>
+          <Typography variant="subtitle1">
+            {formatNumber(percentage)}% ({formatNumber(totalVersesRead)}){' '}
+            Completed.
+          </Typography>
+
+          <Typography variant="subtitle1">
+            {formatNumber(totalVerses - totalVersesRead)}{' '}
+            {formatNumber(100 - percentage)}% left.
+          </Typography>
+        </Box>
+
+        <Grid2
+          display="flex"
+          flexDirection="row"
+          borderRadius="8px"
+          padding="4px"
         >
-          <div
-            style={{
+          <Grid2
+            sx={{
               borderRadius: '8px 0px 0px 8px',
-              backgroundColor: '#fff',
+              backgroundColor: 'secondary.main',
               width: `${percentage}%`,
               height: '6px',
             }}
-          ></div>
-          <div
-            style={{
-              borderRadius: '0px 8px 8px 0px',
-              backgroundColor: '#ff9500',
-              width: `${100 - percentage}%`,
-              height: '6px',
-            }}
-          ></div>
-        </div>
+          />
+          <Grid2
+            width={`${100 - percentage}%`}
+            borderRadius={'0px 8px 8px 0px'}
+            backgroundColor="white"
+            height="6px"
+          />
+        </Grid2>
+
         {percentage >= 100 ? (
-          <div>
-            <Typography>
+          <Grid2>
+            <Typography variant="subtitle1">
               MashaAllah, Congratulation on completing Quran. Please click the
               below button and restart Quran again
             </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => saveHistoryRestart()}
-            >
+            <Button variant="contained" onClick={() => saveHistoryRestart()}>
               Save & Restart
             </Button>
-          </div>
+          </Grid2>
         ) : null}
       </Grid2>
       <Item>
@@ -194,7 +189,7 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Grid2
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -202,6 +197,6 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && <>{children}</>}
-    </div>
+    </Grid2>
   );
 }

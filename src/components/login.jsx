@@ -91,21 +91,30 @@ export default function Login() {
   }
 
   return (
-    <Grid2 container flexDirection="column">
-      <Typography>
+    <Grid2
+      container
+      flexDirection="column"
+      spacing={2}
+      padding={1}
+      sx={{
+        backgroundColor: 'primary.main',
+      }}
+    >
+      <Typography variant="h5" align="center" color="primary.contrastText">
         Assalamualikum! Welcome to Quran Tracker App! Please login or signup and
         start your Quran Journey!
       </Typography>
 
       <Grid2 item justify={'center'} alignItems={'center'} textAlign={'center'}>
         <Grid2
-          style={{
+          sx={{
             padding: '24px',
             margin: '0px 24px 24px 24px',
             boxShadow:
               'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
             borderRadius: '10px',
             border: '2px solid #edf1f4',
+            backgroundColor: 'primary.contrastText',
           }}
         >
           <Typography variant="h4">SignUp</Typography>
@@ -168,7 +177,8 @@ export default function Login() {
       </Grid2>
       <Grid2 item justify={'center'} alignItems={'center'} textAlign={'center'}>
         <Grid2
-          style={{
+          sx={{
+            backgroundColor: 'primary.contrastText',
             padding: '24px',
             margin: '0px 24px 24px 24px',
             boxShadow:

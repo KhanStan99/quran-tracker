@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
+import { Grid2 } from '@mui/material';
 
 const settings = [
   { id: 0, name: 'Logout', visible: sessionStorage.getItem('user') !== null },
@@ -20,7 +21,7 @@ const settings = [
   // },
 ];
 
-const ResponsiveAppBar = (props) => {
+const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const handleOpenUserMenu = (event) => {
@@ -53,8 +54,10 @@ const ResponsiveAppBar = (props) => {
             justifyContent: 'space-between',
           }}
         >
-          <img style={{ width: '40px' }} src="/quran_tracker_192x192.png" />
-          <Typography variant="h5">Quran Tracker</Typography>
+          <Grid2 display={'flex'} alignItems={'center'} flexDirection={'row'}>
+            <img style={{ width: '40px' }} src="/quran_tracker_192x192.png" />
+            <Typography variant="h5">Quran Tracker</Typography>
+          </Grid2>
 
           {localStorage.getItem('user') ? (
             <Box>

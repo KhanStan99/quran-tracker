@@ -1,6 +1,17 @@
 import { React, useState, useEffect } from 'react';
 import { getHistoryData } from '../services/data-service';
 import moment from 'moment';
+import {
+  Grid2,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 
 export default function History(props) {
   const [data, setDate] = useState([]);
@@ -15,29 +26,39 @@ export default function History(props) {
   }, []);
 
   return (
-    <div style={{ textAlign: '-webkit-center' }}>
+    <Grid2>
       {data.length > 0 ? (
-        <table className="progress">
-          <thead>
-            <tr>
-              <th>Started At</th>
-              <th>Finished At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td>{moment(item.startAt).format('DD/MM/YY - hh:mm a')}</td>
-                  <td>{moment(item.endAt).format('DD/MM/YY - hh:mm a')}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Started At</TableCell>
+                <TableCell align="right">Finished At</TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {data.map((item, index) => {
+                return (
+                  <TableRow
+                    key={index}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {moment(item.startAt).format('DD/MM/YY - hh:mm a')}
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(item.endAt).format('DD/MM/YY - hh:mm a')}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       ) : (
         'You dont have any history added'
       )}
-    </div>
+    </Grid2>
   );
 }

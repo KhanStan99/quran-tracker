@@ -1,4 +1,12 @@
-import { Grid2, Typography } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 import { React, useState, useEffect, useContext } from 'react';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
@@ -33,7 +41,7 @@ export default function Tracker(props) {
     setCurrentSurah(e);
     if (e !== 0) {
       setVersesList(list[e - 1].verses);
-      setCurrentVerseNo(0);
+      setCurrentVerseNo(null);
       setVerse('');
     } else {
       setCurrentSurah(0);
@@ -98,58 +106,85 @@ export default function Tracker(props) {
   };
 
   return (
-    <Grid2 padding={1} justifyContent="center" gap={2}>
-      <Grid2 padding={1} borderRadius={12} backgroundColor="#e4e4e4">
+    <Grid2
+      padding={1}
+      justifyContent="center"
+      container
+      spacing={2}
+      width={'100%'}
+    >
+      <Grid2
+        padding={1}
+        borderRadius={12}
+        backgroundColor="#e4e4e4"
+        width={'100%'}
+      >
         <Typography variant="body1">
           Last Aayah Read ({lastSurah} : {lastVerseNo})
         </Typography>
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
-          <Typography>
+          <Typography variant="body1">
             Current Aayah Read: {currentSurah} : {currentVerseNo}
           </Typography>
         ) : null}
       </Grid2>
-      <Grid2 textAlign="center">
-        <Typography variant="h6">Surah List</Typography>
-        <select
-          onChange={(event) =>
-            surahSelected(event.target.options.selectedIndex)
-          }
-        >
-          <option key="0" value={0}>
-            -- Select Current Surah --
-          </option>
-          {list.map((item, index) => {
-            return (
-              <option key={item.id} value={index}>
-                {index + 1}. {item.transliteration}
-              </option>
-            );
-          })}
-        </select>
-        <br />
-        <br />
-        <Typography variant="h6">Aayah List</Typography>
-        <select
-          onChange={(event) =>
-            verseSelected(event.target.options.selectedIndex)
-          }
-        >
-          <option key="0" value={null}>
-            -- Select Last Read Aayah--
-          </option>
-          {versesList.map((item, index) => {
-            return (
-              <option key={index} value={index}>
-                {item.text.slice(0, 25)}... {index + 1}
-              </option>
-            );
-          })}
-        </select>
-        <h2>{verse}</h2>
-        {verse != '' ? (
-          <Typography>
+
+      {verse && <Typography variant="h6">Selected Aayah:{verse}</Typography>}
+
+      <Grid2
+        container
+        textAlign="center"
+        spacing={3}
+        display={'flex'}
+        width={'100%'}
+        flexDirection={'column'}
+      >
+        <Grid2 item>
+          <FormControl fullWidth variant="filled">
+            <InputLabel>Select a Surah</InputLabel>
+            <Select
+              value={currentSurah}
+              label="Select an Surah"
+              onChange={(event) => surahSelected(event.target.value)}
+            >
+              {list.map((item, index) => {
+                return (
+                  <MenuItem key={index} value={index}>
+                    {index + 1}. {item.transliteration}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid2>
+
+        <Grid2 item>
+          {currentSurah && (
+            <FormControl fullWidth variant="filled">
+              <InputLabel>Select an Aayah</InputLabel>
+              <Select
+                value={currentVerseNo}
+                label="Select an Aayah"
+                onChange={(event) => verseSelected(event.target.value)}
+              >
+                {versesList.map((item, index) => {
+                  return (
+                    <MenuItem key={index} value={index}>
+                      {item.text.slice(0, 25)}... {index + 1}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
+        </Grid2>
+
+        <Button variant="contained" onClick={() => saveData()}>
+          Save
+        </Button>
+        {verse && (
+          <Typography variant="h6">
             <b>Note:</b> Aayahs mentioned here is just for reference, We
             recommend you to read Quran from a physical book or from an
             authenticated e-book and then save your progress here. Above shown
@@ -160,10 +195,7 @@ export default function Tracker(props) {
               </a>
             </strong>
           </Typography>
-        ) : null}
-        <button className="raised_button" onClick={() => saveData()}>
-          Save
-        </button>
+        )}
       </Grid2>
     </Grid2>
   );
