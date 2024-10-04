@@ -144,7 +144,12 @@ export default function App() {
           ) : null}
         </Grid>
         <Item>
-          <Tabs variant="fullWidth" value={value} onChange={handleChange}>
+          <Tabs
+            variant="scrollable"
+            scrollButtons="auto"
+            value={value}
+            onChange={handleChange}
+          >
             <Tab label="Tracker" />
             <Tab label="Statistics" />
             <Tab label="History" />

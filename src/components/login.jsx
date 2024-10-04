@@ -198,6 +198,7 @@ export default function Login() {
                 required
                 fullWidth
                 label="Email"
+                type="email"
                 input="email"
                 onChange={(e) => setLoginEmail(e.target.value)}
                 error={loginEmail && !validateEmail(loginEmail)}
