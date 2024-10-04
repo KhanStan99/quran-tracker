@@ -11,7 +11,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Typography from '@mui/material/Typography';
 import LanguageIcon from '@mui/icons-material/Language';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
-import { Grid } from '@mui/material';
+import { Grid2 } from '@mui/material';
 
 export default function LinksComponent() {
   const socialLinks = [
@@ -65,7 +65,7 @@ export default function LinksComponent() {
   };
 
   return (
-    <Grid padding={2}>
+    <Grid2 padding={2}>
       <Typography
         color="primary"
         variant="h4"
@@ -131,6 +131,6 @@ export default function LinksComponent() {
           data-count="default"
         />
       </div>
-    </Grid>
+    </Grid2>
   );
 }

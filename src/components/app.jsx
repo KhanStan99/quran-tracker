@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import Statistics from './statistics';
 import History from './history';
 import Tracker from './tracker';
-import { Button, Grid, Tab, Tabs } from '@mui/material';
+import { Button, Grid2, Tab, Tabs, Typography } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
@@ -77,22 +77,21 @@ export default function App() {
   return !auth ? (
     <Navigate replace to="/login" />
   ) : (
-    <Grid container direction="row">
-      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
-      <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
-        <Grid
-          style={{
-            backgroundColor: '#1976d2',
-            textAlign: 'start',
-            paddingLeft: '24px',
-            paddingRight: '24px',
-            paddingBottom: '24px',
-            color: '#FFF',
-          }}
-        >
-          <p style={{ fontSize: '28px' }} variant="h4">
-            Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
-          </p>
+    <Grid2 flexDirection="column">
+      <Grid2
+        style={{
+          backgroundColor: '#1976d2',
+          textAlign: 'start',
+          paddingLeft: '24px',
+          paddingRight: '24px',
+          paddingBottom: '24px',
+          color: '#FFF',
+        }}
+      >
+        <Typography style={{ fontSize: '28px' }} variant="h4">
+          Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
+        </Typography>
+        <Typography>
           <b>
             {percentage}% - {totalVersesRead} Verses Completed.
           </b>
@@ -100,91 +99,87 @@ export default function App() {
           <b style={{ color: '#ff9500' }}>
             {100 - percentage}% - {totalVerses - totalVersesRead} Verses left.
           </b>
+        </Typography>
+        <div
+          style={{
+            marginTop: '12px',
+            display: 'flex',
+            flexDirection: 'row',
+            borderStyle: 'solid',
+            borderRadius: '8px',
+            padding: '4px',
+          }}
+        >
           <div
             style={{
-              marginTop: '12px',
-              display: 'flex',
-              flexDirection: 'row',
-              borderStyle: 'solid',
-              borderRadius: '8px',
-              padding: '4px',
+              borderRadius: '8px 0px 0px 8px',
+              backgroundColor: '#fff',
+              width: `${percentage}%`,
+              height: '6px',
             }}
-          >
-            <div
-              style={{
-                borderRadius: '8px 0px 0px 8px',
-                backgroundColor: '#fff',
-                width: `${percentage}%`,
-                height: '6px',
-              }}
-            ></div>
-            <div
-              style={{
-                borderRadius: '0px 8px 8px 0px',
-                backgroundColor: '#ff9500',
-                width: `${100 - percentage}%`,
-                height: '6px',
-              }}
-            ></div>
+          ></div>
+          <div
+            style={{
+              borderRadius: '0px 8px 8px 0px',
+              backgroundColor: '#ff9500',
+              width: `${100 - percentage}%`,
+              height: '6px',
+            }}
+          ></div>
+        </div>
+        {percentage >= 100 ? (
+          <div>
+            <Typography>
+              MashaAllah, Congratulation on completing Quran. Please click the
+              below button and restart Quran again
+            </Typography>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => saveHistoryRestart()}
+            >
+              Save & Restart
+            </Button>
           </div>
-          {percentage >= 100 ? (
-            <div>
-              <p>
-                MashaAllah, Congratulation on completing Quran. Please click the
-                below button and restart Quran again
-              </p>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => saveHistoryRestart()}
-              >
-                Save & Restart
-              </Button>
-            </div>
-          ) : null}
-        </Grid>
-        <Item>
-          <Tabs
-            variant="scrollable"
-            scrollButtons="auto"
-            value={value}
-            onChange={handleChange}
-          >
-            <Tab label="Tracker" />
-            <Tab label="Statistics" />
-            <Tab label="History" />
-            <Tab label="About Dev" />
-          </Tabs>
+        ) : null}
+      </Grid2>
+      <Item>
+        <Tabs
+          variant="scrollable"
+          scrollButtons="auto"
+          value={value}
+          onChange={handleChange}
+        >
+          <Tab label="Tracker" />
+          <Tab label="Statistics" />
+          <Tab label="History" />
+          <Tab label="About Dev" />
+        </Tabs>
 
-          <SwipeableViews
-            axis={'x'}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            <TabPanel value={value} index={0}>
-              <Tracker
-                handleChangeIndex={handleChangeIndex}
-                list={mainList}
-                getDataForUser={getDataForUser}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Statistics
-                handleChangeIndex={handleChangeIndex}
-                list={mainList}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <History handleChangeIndex={handleChangeIndex} />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <LinksComponent />
-            </TabPanel>
-          </SwipeableViews>
-        </Item>
-      </Grid>
-      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
-    </Grid>
+        <SwipeableViews
+          axis={'x'}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
+          <TabPanel value={value} index={0}>
+            <Tracker
+              handleChangeIndex={handleChangeIndex}
+              list={mainList}
+              getDataForUser={getDataForUser}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Statistics handleChangeIndex={handleChangeIndex} list={mainList} />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <History handleChangeIndex={handleChangeIndex} />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <LinksComponent />
+          </TabPanel>
+        </SwipeableViews>
+      </Item>
+    </Grid2>
   );
 }
 

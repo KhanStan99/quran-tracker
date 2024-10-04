@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Grid2, Typography } from '@mui/material';
 import { React, useState, useEffect, useContext } from 'react';
 import dataService from '../services/data-service';
 import quran from '../assets/quran.json';
@@ -98,40 +98,20 @@ export default function Tracker(props) {
   };
 
   return (
-    <div
-      className="font-family"
-      style={{ padding: '0px 24px 24px 24px', textAlign: 'start' }}
-    >
-      <div
-        style={{
-          backgroundColor: '#e4e4e4',
-          marginTop: '10px',
-          padding: '12px',
-          borderRadius: '12px',
-        }}
-      >
-        <p
-          className="font-family"
-          style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
-        >
-          <strong className="font-family">Last Aayah Read:</strong> {lastSurah}{' '}
-          : {lastVerseNo}
-        </p>
+    <Grid2 padding={1} justifyContent="center" gap={2}>
+      <Grid2 padding={1} borderRadius={12} backgroundColor="#e4e4e4">
+        <Typography variant="body1">
+          Last Aayah Read ({lastSurah} : {lastVerseNo})
+        </Typography>
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
-          <p
-            className="font-family"
-            style={{ fontSize: '22px', marginTop: '0px', marginBottom: '-5px' }}
-          >
-            <strong className="font-family">Current Aayah Read:</strong>{' '}
-            {currentSurah} : {currentVerseNo}
-          </p>
+          <Typography>
+            Current Aayah Read: {currentSurah} : {currentVerseNo}
+          </Typography>
         ) : null}
-      </div>
-      <div style={{ marginTop: '15px', textAlign: 'center' }}>
-        <p>
-          <strong>Surah List</strong>
-        </p>
+      </Grid2>
+      <Grid2 textAlign="center">
+        <Typography variant="h6">Surah List</Typography>
         <select
           onChange={(event) =>
             surahSelected(event.target.options.selectedIndex)
@@ -148,11 +128,9 @@ export default function Tracker(props) {
             );
           })}
         </select>
-
-        <p>
-          <strong className="font-family">Aayah List</strong>
-        </p>
-
+        <br />
+        <br />
+        <Typography variant="h6">Aayah List</Typography>
         <select
           onChange={(event) =>
             verseSelected(event.target.options.selectedIndex)
@@ -171,7 +149,7 @@ export default function Tracker(props) {
         </select>
         <h2>{verse}</h2>
         {verse != '' ? (
-          <p>
+          <Typography>
             <b>Note:</b> Aayahs mentioned here is just for reference, We
             recommend you to read Quran from a physical book or from an
             authenticated e-book and then save your progress here. Above shown
@@ -181,12 +159,12 @@ export default function Tracker(props) {
                 risan/quran-json
               </a>
             </strong>
-          </p>
+          </Typography>
         ) : null}
         <button className="raised_button" onClick={() => saveData()}>
           Save
         </button>
-      </div>
-    </div>
+      </Grid2>
+    </Grid2>
   );
 }

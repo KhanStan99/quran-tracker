@@ -10,6 +10,8 @@ import UserContext from './UserContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { Grid2, Link, Typography } from '@mui/material';
+import './styles.css';
 
 export default function Main() {
   const theme = createTheme({
@@ -62,43 +64,37 @@ export default function Main() {
             onClose={toggleDrawer(false)}
             onOpen={toggleDrawer(true)}
           />
-          <div
-            style={{
-              minHeight: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={snackBarOptions.open}
+            onClose={handleClose}
+            key={'top' + 'right'}
           >
-            <Snackbar
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              open={snackBarOptions.open}
-              onClose={handleClose}
-              key={'top' + 'right'}
-            >
-              <Alert severity={snackBarOptions.severity} sx={{ width: '100%' }}>
-                {snackBarOptions.message}
-              </Alert>
-            </Snackbar>
-            <UserContext.Provider value={handleClick}>
-              <div>
-                <ResponsiveAppBar toggleDrawer={toggleDrawer}/>
+            <Alert severity={snackBarOptions.severity} sx={{ width: '100%' }}>
+              {snackBarOptions.message}
+            </Alert>
+          </Snackbar>
+          <UserContext.Provider value={handleClick}>
+            <ResponsiveAppBar toggleDrawer={toggleDrawer} />
+            <Grid2 container flexDirection="column">
+              <Grid2 item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
                 <Routes>
                   <Route path="*" element={<Login />} />
                   <Route index path="/login" element={<Login />} />
                   <Route path="/home" element={<App />} />
                 </Routes>
-              </div>
-              <footer style={{ textAlign: 'center' }}>
-                <p>
-                  If you have any feedback, bug report or want to contribute,{' '}
-                  <a href="mailto:soubankhan3@gmail.com" target="_blank">
-                    then send me an email
-                  </a>
-                </p>
-              </footer>
-            </UserContext.Provider>
-          </div>
+
+                <footer style={{ textAlign: 'center', padding: '6px' }}>
+                  <Typography>
+                    If you have any feedback, bug report or want to contribute,{' '}
+                    <Link href="mailto:soubankhan3@gmail.com" target="_blank">
+                      then send me an email
+                    </Link>
+                  </Typography>
+                </footer>
+              </Grid2>
+            </Grid2>
+          </UserContext.Provider>
         </ThemeProvider>
       </BrowserRouter>
     </StrictMode>

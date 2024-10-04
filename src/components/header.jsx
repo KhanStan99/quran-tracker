@@ -54,7 +54,7 @@ const ResponsiveAppBar = (props) => {
           }}
         >
           <img style={{ width: '40px' }} src="/quran_tracker_192x192.png" />
-          <p>Quran Tracker</p>
+          <Typography variant="h5">Quran Tracker</Typography>
 
           {localStorage.getItem('user') ? (
             <Box>

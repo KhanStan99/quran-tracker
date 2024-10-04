@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid2, TextField, Typography } from '@mui/material';
 import loginService from '../services/login-service';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
@@ -91,151 +91,133 @@ export default function Login() {
   }
 
   return (
-    <Grid container direction="row">
-      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
-      <Grid item xs={12} sm={12} md={6} lg={4} xl={4} className="App">
-        <p>
-          Assalamualikum! Welcome to Quran Tracker App! Please login or signup
-          and start your Quran Journey!
-        </p>
+    <Grid2 container flexDirection="column">
+      <Typography>
+        Assalamualikum! Welcome to Quran Tracker App! Please login or signup and
+        start your Quran Journey!
+      </Typography>
 
-        <Grid
-          item
-          justify={'center'}
-          alignItems={'center'}
-          textAlign={'center'}
+      <Grid2 item justify={'center'} alignItems={'center'} textAlign={'center'}>
+        <Grid2
+          style={{
+            padding: '24px',
+            margin: '0px 24px 24px 24px',
+            boxShadow:
+              'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
+            borderRadius: '10px',
+            border: '2px solid #edf1f4',
+          }}
         >
-          <Grid
-            style={{
-              padding: '24px',
-              margin: '0px 24px 24px 24px',
-              boxShadow:
-                'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
-              borderRadius: '10px',
-              border: '2px solid #edf1f4',
-            }}
-          >
-            <Typography variant="h4">SignUp</Typography>
-            <Grid item style={{ margin: '12px' }}>
-              <TextField
-                fullWidth
-                onChange={(e) => setName(e.target.value)}
-                required
-                error={name && name.length < 3}
-                label="Name"
-                variant="filled"
-              />
-              {name && name.length < 3 ? 'Minimum 3 characters required' : null}
-            </Grid>
-            <Grid item style={{ margin: '12px' }}>
-              <TextField
-                fullWidth
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                error={email && !validateEmail(email)}
-                label="Email"
-                variant="filled"
-              />
-              {email && !validateEmail(email) ? (
-                <Typography variant="body1">
-                  Enter valid email address
+          <Typography variant="h4">SignUp</Typography>
+          <Grid2 item style={{ margin: '12px' }}>
+            <TextField
+              fullWidth
+              onChange={(e) => setName(e.target.value)}
+              required
+              error={name && name.length < 3}
+              label="Name"
+              variant="filled"
+            />
+            {name && name.length < 3 ? 'Minimum 3 characters required' : null}
+          </Grid2>
+          <Grid2 item style={{ margin: '12px' }}>
+            <TextField
+              fullWidth
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              error={email && !validateEmail(email)}
+              label="Email"
+              variant="filled"
+            />
+            {email && !validateEmail(email) ? (
+              <Typography variant="body1">Enter valid email address</Typography>
+            ) : null}
+          </Grid2>
+          <Grid2 style={{ textAlign: 'start' }}>
+            <Typography textAlign={'center'} variant="h6">
+              Remeber these points before continuing:
+            </Typography>
+            <ul style={{ paddingInlineStart: '0px' }}>
+              <li>
+                <Typography>
+                  ✅ We save your email address to sync your data to database,
+                  so you can use the app anywhere.
                 </Typography>
-              ) : null}
-            </Grid>
-            <Grid style={{ textAlign: 'start' }}>
-              <p textAlign={'center'}>
-                <b>Remeber these points before continuing:</b>
-              </p>
-              <ul style={{ paddingInlineStart: '0px' }}>
-                <li>
-                  <p>
-                    ✅ We save your email address to sync your data to database,
-                    so you can use the app anywhere.
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    ✅ We will send you login OTP to your email anytime on you
-                    want to login.
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    ✅ We may send you emails later related to your account or
-                    app features later if required.
-                  </p>
-                </li>
-              </ul>
-            </Grid>
+              </li>
+              <li>
+                <Typography>
+                  ✅ We will send you login OTP to your email anytime on you
+                  want to login.
+                </Typography>
+              </li>
+              <li>
+                <Typography>
+                  ✅ We may send you emails later related to your account or app
+                  features later if required.
+                </Typography>
+              </li>
+            </ul>
+          </Grid2>
 
-            <Grid item xs={12}>
-              <button onClick={handleSignup} className="raised_button">
-                SignUp
-              </button>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid
-          item
-          justify={'center'}
-          alignItems={'center'}
-          textAlign={'center'}
+          <Grid2 item xs={12}>
+            <button onClick={handleSignup} className="raised_button">
+              SignUp
+            </button>
+          </Grid2>
+        </Grid2>
+      </Grid2>
+      <Grid2 item justify={'center'} alignItems={'center'} textAlign={'center'}>
+        <Grid2
+          style={{
+            padding: '24px',
+            margin: '0px 24px 24px 24px',
+            boxShadow:
+              'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
+            borderRadius: '10px',
+            border: '2px solid #edf1f4',
+          }}
         >
-          <Grid
-            style={{
-              padding: '24px',
-              margin: '0px 24px 24px 24px',
-              boxShadow:
-                'inset -5px -5px 10px rgba(0,0,0,0.1), inset 5px 5px 20px rgba(0,0,0,0.1)',
-              borderRadius: '10px',
-              border: '2px solid #edf1f4',
-            }}
-          >
-            <Typography variant="h4">Login</Typography>
-            <Grid item style={{ margin: '12px' }}>
-              <TextField
-                disabled={isLoginOtpSend}
-                required
-                fullWidth
-                label="Email"
-                type="email"
-                input="email"
-                onChange={(e) => setLoginEmail(e.target.value)}
-                error={loginEmail && !validateEmail(loginEmail)}
-                variant="filled"
-              />
-              {loginEmail && !validateEmail(loginEmail) ? (
-                <Typography variant="body1">
-                  Enter valid email address
-                </Typography>
-              ) : null}
-            </Grid>
-            <Grid item style={{ margin: '12px' }}>
-              <TextField
-                disabled={!isLoginOtpSend}
-                required
-                fullWidth
-                input="number"
-                label="OTP"
-                variant="filled"
-                onChange={(e) => setOtp(e.target.value)}
-                error={otp && otp.length < 4}
-              />
-              {otp && otp.length < 4 ? 'Minimum 4 digits required' : null}
-            </Grid>
+          <Typography variant="h4">Login</Typography>
+          <Grid2 item style={{ margin: '12px' }}>
+            <TextField
+              disabled={isLoginOtpSend}
+              required
+              fullWidth
+              label="Email"
+              type="email"
+              input="email"
+              onChange={(e) => setLoginEmail(e.target.value)}
+              error={loginEmail && !validateEmail(loginEmail)}
+              variant="filled"
+            />
+            {loginEmail && !validateEmail(loginEmail) ? (
+              <Typography variant="body1">Enter valid email address</Typography>
+            ) : null}
+          </Grid2>
+          <Grid2 item style={{ margin: '12px' }}>
+            <TextField
+              disabled={!isLoginOtpSend}
+              required
+              fullWidth
+              input="number"
+              label="OTP"
+              variant="filled"
+              onChange={(e) => setOtp(e.target.value)}
+              error={otp && otp.length < 4}
+            />
+            {otp && otp.length < 4 ? 'Minimum 4 digits required' : null}
+          </Grid2>
 
-            <Grid item xs={12}>
-              <button
-                onClick={isLoginOtpSend ? handleVerifyOTP : handleSendOTP}
-                className="raised_button"
-              >
-                {isLoginOtpSend ? 'Verify OTP' : 'Send OTP'}
-              </button>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={false} sm={false} md={3} lg={4} xl={4}></Grid>
-    </Grid>
+          <Grid2 item xs={12}>
+            <button
+              onClick={isLoginOtpSend ? handleVerifyOTP : handleSendOTP}
+              className="raised_button"
+            >
+              {isLoginOtpSend ? 'Verify OTP' : 'Send OTP'}
+            </button>
+          </Grid2>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }
