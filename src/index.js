@@ -4,6 +4,9 @@ import * as serviceWorker from './serviceWorker';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Main from './components/main';
 
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
+
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
@@ -24,7 +27,9 @@ const theme = createTheme({
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Main />
+      <Provider store={store}>
+        <Main />
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>
 );

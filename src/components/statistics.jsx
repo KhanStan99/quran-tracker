@@ -85,7 +85,7 @@ export default function Statistics(props) {
     dataService
       .deleteLatestEntry(JSON.parse(localStorage.getItem('user')).userId)
       .then(() => {
-        props.handleChangeIndex(0);
+        props.handleRefetch(0);
       })
       .catch((err) => {
         showAlert(true, 'error', err);

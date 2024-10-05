@@ -5,17 +5,16 @@ import Statistics from './statistics';
 import History from './history';
 import Tracker from './tracker';
 import { Box, Button, Grid2, Tab, Tabs, Typography } from '@mui/material';
-import SwipeableViews from 'react-swipeable-views';
 import './styles.css';
 import LinksComponent from './about-dev';
 import { Navigate } from 'react-router-dom';
 import quran from '../assets/quran.json';
-import { getData, saveHistoryData } from '../services/data-service';
+import { saveHistoryData } from '../services/data-service';
 import { formatNumber } from '../utils/text-utils';
+import { useGetUserDataByIdQuery } from '../services/dataService';
 
 export default function App() {
   let auth = localStorage.getItem('user');
-  const [mainList, setMainList] = useState([]);
   const [value, setValue] = useState(0);
   const [totalVersesRead, setTotalVersesRead] = useState(0);
   const [percentage, setPercentage] = useState(0);
@@ -24,9 +23,6 @@ export default function App() {
   const totalVerses = 6236;
 
   const [isRestartStats, setRestartStats] = useState(true);
-  useEffect(() => {
-    getDataForUser();
-  }, []);
 
   useEffect(() => {
     setPercentage(parseFloat((totalVersesRead / totalVerses) * 100).toFixed(2));
@@ -36,16 +32,21 @@ export default function App() {
     setValue(newValue);
     setRestartStats(!isRestartStats);
   };
-  const handleChangeIndex = (index) => {
+
+  const { data, error, isLoading, refetch } = useGetUserDataByIdQuery(
+    JSON.parse(localStorage.getItem('user')).userId
+  );
+
+  const handleRefetch = (index) => {
+    refetch();
+
     setValue(index);
   };
 
-  const getDataForUser = (shift = false) => {
-    getData(JSON.parse(localStorage.getItem('user')).userId).then((res) => {
-      if (res.data.length > 0) {
-        const mainData = res.data;
-        setMainList(mainData);
-        let latestEntry = mainData[0];
+  useEffect(() => {
+    if (!error && !isLoading && data) {
+      if (data.length > 0) {
+        let latestEntry = data[0];
 
         let total = 0;
         if (latestEntry.current_surah != 0) {
@@ -56,24 +57,25 @@ export default function App() {
         } else {
           setTotalVersesRead(latestEntry.current_aayah);
         }
-        if (shift) {
-          handleChangeIndex(1);
-        }
       }
-    });
-  };
+    }
+  }, [data, error, isLoading]);
 
   const saveHistoryRestart = async () => {
     await saveHistoryData({
       user: JSON.parse(localStorage.getItem('user')).userId,
-      startAt: mainList[mainList.length - 1].time_stamp,
-      endAt: mainList[0].time_stamp,
+      startAt: data[data.length - 1].time_stamp,
+      endAt: data[0].time_stamp,
     });
     window.location.reload();
   };
 
   return !auth ? (
     <Navigate replace to="/login" />
+  ) : isLoading ? (
+    <Typography variant="h3" align="center">
+      Loading...
+    </Typography>
   ) : (
     <Grid2 flexDirection="column">
       <Grid2
@@ -151,28 +153,29 @@ export default function App() {
           <Tab label="About Dev" />
         </Tabs>
 
-        <SwipeableViews
-          axis={'x'}
-          index={value}
-          onChangeIndex={handleChangeIndex}
-        >
-          <TabPanel value={value} index={0}>
-            <Tracker
-              handleChangeIndex={handleChangeIndex}
-              list={mainList}
-              getDataForUser={getDataForUser}
-            />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Statistics handleChangeIndex={handleChangeIndex} list={mainList} />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <History handleChangeIndex={handleChangeIndex} />
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <LinksComponent />
-          </TabPanel>
-        </SwipeableViews>
+        <TabPanel value={value} index={0}>
+          <Tracker
+            list={data}
+            handleRefetch={(index) => {
+              handleRefetch(index);
+            }}
+          />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Statistics
+            list={data}
+            handleRefetch={(index) => {
+              console.log('🚀 ~ STA index:', index);
+              handleRefetch(index);
+            }}
+          />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <History />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <LinksComponent />
+        </TabPanel>
       </Item>
     </Grid2>
   );

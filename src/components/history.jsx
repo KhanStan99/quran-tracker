@@ -1,5 +1,4 @@
-import { React, useState, useEffect } from 'react';
-import { getHistoryData } from '../services/data-service';
+import { React } from 'react';
 import moment from 'moment';
 import {
   Grid2,
@@ -10,23 +9,20 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
+import { useGetUserHistoryDataByIdQuery } from '../services/dataService';
 
-export default function History(props) {
-  const [data, setDate] = useState([]);
-  useEffect(() => {
-    getHistoryData(JSON.parse(localStorage.getItem('user')).userId).then(
-      (response) => {
-        if (response.data && response.data.length > 0) {
-          setDate(response.data);
-        }
-      }
-    );
-  }, []);
+export default function History() {
+  const { data, isLoading } = useGetUserHistoryDataByIdQuery(
+    JSON.parse(localStorage.getItem('user')).userId,
+    { refetchOnMount: false, refetchOnReconnect: false, refetchOnFocus: false }
+  );
 
   return (
     <Grid2>
-      {data.length > 0 ? (
+      {isLoading && <Typography variant="h6">Loading history...</Typography>}
+      {!isLoading && data.length > 0 ? (
         <TableContainer component={Paper}>
           <Table size="small">
             <TableHead>
