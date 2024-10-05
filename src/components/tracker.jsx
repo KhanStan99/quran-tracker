@@ -125,7 +125,7 @@ export default function Tracker(props) {
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
           <Typography variant="body1">
-            Current Aayah Read: {currentSurah} : {currentVerseNo}
+            Current Aayah Read: ({currentSurah} : {currentVerseNo})
           </Typography>
         ) : null}
       </Grid2>
@@ -144,7 +144,7 @@ export default function Tracker(props) {
           <FormControl fullWidth variant="filled">
             <InputLabel>Select a Surah</InputLabel>
             <Select
-              value={currentSurah}
+              value={currentSurah ? currentSurah : ''}
               label="Select an Surah"
               onChange={(event) => surahSelected(event.target.value)}
             >
@@ -164,7 +164,7 @@ export default function Tracker(props) {
             <FormControl fullWidth variant="filled">
               <InputLabel>Select an Aayah</InputLabel>
               <Select
-                value={currentVerseNo}
+                value={currentVerseNo ? currentVerseNo : ''}
                 label="Select an Aayah"
                 onChange={(event) => verseSelected(event.target.value)}
               >
@@ -185,10 +185,10 @@ export default function Tracker(props) {
         </Button>
         {verse && (
           <Typography variant="h6">
-            <b>Note:</b> Aayahs mentioned here is just for reference, We
+            <b>Note:</b> Aayahs mentioned here are just for reference, We
             recommend you to read Quran from a physical book or from an
             authenticated e-book and then save your progress here. Above shown
-            aayahs are fetched from":{' '}
+            aayahs are fetched from:{' '}
             <strong>
               <a href="https://github.com/risan/quran-json" target="_blank">
                 risan/quran-json
