@@ -17,10 +17,13 @@ I build an app for tracking Quran progress.
 Live at: https://quran-read-tracker.web.app/
 
 ## Screenshots:
-Tracker Home
+#Login:
+![image](https://github.com/user-attachments/assets/b2e2889a-3175-43a0-bdd3-01dbc8ea7f10)
+
+#Tracker Home
 ![Tracker - Home](https://github.com/user-attachments/assets/30cdcf50-6b28-463e-830f-5ad0fc949f92)
 
-Graph View
+#Graph View
 ![Statistics](https://github.com/user-attachments/assets/c7b604a7-bd24-4a4a-87e6-88d5f585debd)
 
 ### My Portfolio:
