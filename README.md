@@ -17,9 +17,11 @@ I build an app for tracking Quran progress.
 Live at: https://quran-read-tracker.web.app/
 
 ## Screenshots:
-![Tracker - Surah and Aayah](https://i.ibb.co/1Z9mq86/1.png)
+Tracker Home
+![Tracker - Home](https://github.com/user-attachments/assets/30cdcf50-6b28-463e-830f-5ad0fc949f92)
 
-![Statistics](https://i.ibb.co/xg6gGn2/2.png)
+Graph View
+![Statistics](https://github.com/user-attachments/assets/c7b604a7-bd24-4a4a-87e6-88d5f585debd)
 
 ### My Portfolio:
 [Click here to open](https://hidayat-portfolio.web.app/)
