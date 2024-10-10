@@ -4,7 +4,8 @@ I build an app for tracking Quran progress.
 
 > __Login is available now! : https://quran-read-tracker.web.app__
 
-![](https://i.ibb.co/yqddd07/main.jpg)
+![5](https://github.com/user-attachments/assets/bbbe3543-ed6f-45b0-85f7-aa9899984c50)
+
 
 ## Features:
 - Track Your Quran Progress.
@@ -17,9 +18,14 @@ I build an app for tracking Quran progress.
 Live at: https://quran-read-tracker.web.app/
 
 ## Screenshots:
-![Tracker - Surah and Aayah](https://i.ibb.co/1Z9mq86/1.png)
+#Login:
+![image](https://github.com/user-attachments/assets/b2e2889a-3175-43a0-bdd3-01dbc8ea7f10)
 
-![Statistics](https://i.ibb.co/xg6gGn2/2.png)
+#Tracker Home
+![Tracker - Home](https://github.com/user-attachments/assets/30cdcf50-6b28-463e-830f-5ad0fc949f92)
+
+#Graph View
+![Statistics](https://github.com/user-attachments/assets/c7b604a7-bd24-4a4a-87e6-88d5f585debd)
 
 ### My Portfolio:
 [Click here to open](https://hidayat-portfolio.web.app/)
