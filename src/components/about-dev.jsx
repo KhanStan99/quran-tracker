@@ -16,7 +16,7 @@ import { Grid2 } from '@mui/material';
 export default function LinksComponent() {
   const socialLinks = [
     {
-      title: 'Portfolio',
+      title: 'Portfolio & Other Projects',
       icon: <LanguageIcon color="primary" />,
       target: 'https://hidayat-portfolio.web.app/',
     },
@@ -39,11 +39,6 @@ export default function LinksComponent() {
       title: 'LinkedIn',
       icon: <LinkedInIcon color="primary" />,
       target: 'https://www.linkedin.com/in/userhidayatkhan/',
-    },
-    {
-      title: 'My Blog - Trentweet',
-      icon: <LanguageIcon color="primary" />,
-      target: 'https://www.trentweet.in/',
     },
   ];
 
@@ -77,16 +72,13 @@ export default function LinksComponent() {
       <List component="nav" aria-label="secondary mailbox folder">
         {socialLinks.map((item) => {
           return (
-            <div key={item.target}>
-              <ListItem
-                button
-                onClick={(event) => handleListItemClick(item.target)}
-              >
+            <Grid2 key={item.target}>
+              <ListItem button onClick={() => handleListItemClick(item.target)}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItem>
               <Divider />
-            </div>
+            </Grid2>
           );
         })}
       </List>
@@ -98,7 +90,7 @@ export default function LinksComponent() {
       >
         <b>Youtube Channel's</b>
       </Typography>
-      <div
+      <Grid2
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -107,30 +99,16 @@ export default function LinksComponent() {
       >
         {ytLinks.map((item) => {
           return (
-            <div key={item.target}>
+            <Grid2 key={item.target} width={'100%'}>
               <ListItem button onClick={() => handleListItemClick(item.target)}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItem>
               <Divider />
-            </div>
+            </Grid2>
           );
         })}
-
-        <div
-          className="g-ytsubscribe"
-          data-channelid="UCW4ThNiminAyT4pvQR_t5Eg"
-          data-layout="full"
-          data-count="default"
-        />
-
-        <div
-          className="g-ytsubscribe"
-          data-channelid="UCAwvnxzb2YgftWrF8Vu7FuA"
-          data-layout="full"
-          data-count="default"
-        />
-      </div>
+      </Grid2>
     </Grid2>
   );
 }

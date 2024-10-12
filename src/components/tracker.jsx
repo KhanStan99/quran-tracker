@@ -125,7 +125,7 @@ export default function Tracker(props) {
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
           <Typography variant="body1">
-            Current Aayah Read: ({currentSurah} : {currentVerseNo})
+            Current Aayah Read: ({currentSurah + 1} : {currentVerseNo})
           </Typography>
         ) : null}
       </Grid2>
@@ -150,7 +150,7 @@ export default function Tracker(props) {
             >
               {list.map((item, index) => {
                 return (
-                  <MenuItem key={index} value={index}>
+                  <MenuItem key={index} value={item.id}>
                     {index + 1}. {item.transliteration}
                   </MenuItem>
                 );
@@ -170,7 +170,7 @@ export default function Tracker(props) {
               >
                 {versesList.map((item, index) => {
                   return (
-                    <MenuItem key={index} value={index}>
+                    <MenuItem key={index} value={item.id}>
                       {item.text.slice(0, 25)}... {index + 1}
                     </MenuItem>
                   );
