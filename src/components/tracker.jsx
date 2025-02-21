@@ -125,7 +125,7 @@ export default function Tracker(props) {
 
         {currentSurah > 0 || currentVerseNo > 0 ? (
           <Typography variant="body1">
-            Current Aayah Read: ({currentSurah + 1} : {currentVerseNo})
+            Current Aayah Read: ({currentSurah} : {currentVerseNo})
           </Typography>
         ) : null}
       </Grid2>
