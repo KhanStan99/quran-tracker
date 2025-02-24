@@ -38,3 +38,7 @@ Live at: https://quran-read-tracker.web.app/
 
 - Fixed issue in tracker page, where it was not showing the correct current verse number.
 - Added couple of new statistics.
+
+#### 1.1.1: 22nd Feb 2025
+
+- Enhanced the UI of tracker page.

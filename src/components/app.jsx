@@ -94,15 +94,19 @@ export default function App() {
           Assalamualikum, {JSON.parse(localStorage.getItem('user')).userName}!
         </Typography>
 
-        <Box>
+        <Box
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-around'}
+        >
           <Typography variant="subtitle1">
-            {formatNumber(percentage)}% ({formatNumber(totalVersesRead)}){' '}
-            Completed.
+            {formatNumber(totalVersesRead)} verses completed (
+            {formatNumber(100 - percentage)}%)
           </Typography>
 
           <Typography variant="subtitle1">
-            {formatNumber(totalVerses - totalVersesRead)}{' '}
-            {formatNumber(100 - percentage)}% left.
+            {formatNumber(totalVerses - totalVersesRead)} verses left{' '}
+            {formatNumber(percentage)}%
           </Typography>
         </Box>
 
@@ -116,15 +120,14 @@ export default function App() {
             sx={{
               borderRadius: '8px 0px 0px 8px',
               backgroundColor: 'secondary.main',
-              width: `${percentage}%`,
-              height: '6px',
+              width: `${percentage <= 1 ? 1 : percentage}%`,
+              height: '24px',
             }}
           />
           <Grid2
             width={`${100 - percentage}%`}
             borderRadius={'0px 8px 8px 0px'}
             backgroundColor="white"
-            height="6px"
           />
         </Grid2>
 

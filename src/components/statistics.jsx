@@ -28,7 +28,6 @@ export default function Statistics(props) {
   const [listHistoryVerse, setListHistoryVerse] = useState([]);
   const [totalVersesRead, setTotalVersesRead] = useState(0);
   const [avgFormula, setAvgFormula] = useState(0);
-  const [averageReadingTime, setAverageReadingTime] = useState(0);
   const [longestStreak, setLongestStreak] = useState(0);
   const [currentStreak, setCurrentStreak] = useState(0);
   const [versesPerDay, setVersesPerDay] = useState(0);
@@ -38,89 +37,79 @@ export default function Statistics(props) {
   const showAlert = useContext(UserContext);
 
   useEffect(() => {
-    if (props.list.length > 0) {
-      let readingResponseItem = props.list;
-      let latestReadingItem = readingResponseItem[0];
-      let readVersusList = [];
-      let graphHistory = [];
-      let listHistory = [];
-      let readingTimes = [];
-      let streaks = [];
-      let currentStreakCount = 0;
-      let longestStreakCount = 0;
-      let versesPerDayCount = 0;
+    let readingResponseItem = props.list;
+    let latestReadingItem = readingResponseItem[0];
+    let readVersusList = [];
+    let graphHistory = [];
+    let listHistory = [];
+    let readingTimes = [];
+    let streaks = [];
+    let currentStreakCount = 0;
+    let longestStreakCount = 0;
+    let versesPerDayCount = 0;
 
-      readingResponseItem.forEach((bush) => {
-        readVersusList.push(bush.aayah_total);
-      });
-      readingResponseItem.forEach((bush) => {
-        graphHistory.push(moment(bush.time_stamp).format('DD/MM'));
-        listHistory.push(moment(bush.time_stamp).format('DD/MM/YY - hh:mm a'));
-      });
+    readingResponseItem.forEach((bush) => {
+      readVersusList.push(bush.aayah_total);
+    });
+    readingResponseItem.forEach((bush) => {
+      graphHistory.push(moment(bush.time_stamp).format('DD/MM'));
+      listHistory.push(moment(bush.time_stamp).format('DD/MM/YY - hh:mm a'));
+    });
 
-      // Calculate reading times
-      for (let i = 1; i < readingResponseItem.length; i++) {
-        let startTime = moment(readingResponseItem[i].time_stamp);
-        let endTime = moment(readingResponseItem[i - 1].time_stamp);
-        let duration = moment.duration(endTime.diff(startTime)).asMinutes();
-        readingTimes.push(duration);
-      }
+    // Calculate reading times
+    for (let i = 1; i < readingResponseItem.length; i++) {
+      let startTime = moment(readingResponseItem[i].time_stamp);
+      let endTime = moment(readingResponseItem[i - 1].time_stamp);
+      let duration = moment.duration(endTime.diff(startTime)).asMinutes();
+      readingTimes.push(duration);
+    }
 
-      // Calculate streaks
-      for (let i = 1; i < readingResponseItem.length; i++) {
-        let currentDay = moment(readingResponseItem[i].time_stamp).startOf(
-          'day'
-        );
-        let previousDay = moment(readingResponseItem[i - 1].time_stamp).startOf(
-          'day'
-        );
-        if (currentDay.diff(previousDay, 'days') === 1) {
-          currentStreakCount++;
-        } else {
-          streaks.push(currentStreakCount);
-          currentStreakCount = 0;
-        }
-      }
-      streaks.push(currentStreakCount);
-      longestStreakCount = Math.max(...streaks);
-      currentStreakCount = streaks[streaks.length - 1];
-
-      // Calculate verses per day
-      let totalDays =
-        moment(readingResponseItem[0].time_stamp).diff(
-          moment(
-            readingResponseItem[readingResponseItem.length - 1].time_stamp
-          ),
-          'days'
-        ) + 1;
-      versesPerDayCount = totalVersesRead / totalDays;
-
-      setOldGraphData(readVersusList);
-      setGraphHistory(graphHistory);
-      setListHistory(listHistory);
-      setListHistoryVerse(readVersusList);
-      setLongestStreak(longestStreakCount);
-      setCurrentStreak(currentStreakCount);
-      setVersesPerDay(versesPerDayCount);
-      
-      let total = 0;
-      if (latestReadingItem.current_surah != 0) {
-        for (let i = 0; i <= latestReadingItem.current_surah - 2; i++) {
-          total = total + list[i].total_verses;
-        }
-        setTotalVersesRead(total + latestReadingItem.current_aayah);
+    // Calculate streaks
+    for (let i = 1; i < readingResponseItem.length; i++) {
+      let currentDay = moment(readingResponseItem[i].time_stamp).startOf('day');
+      let previousDay = moment(readingResponseItem[i - 1].time_stamp).startOf(
+        'day'
+      );
+      if (currentDay.diff(previousDay, 'days') === 1) {
+        currentStreakCount++;
       } else {
-        setTotalVersesRead(latestReadingItem.current_aayah);
+        streaks.push(currentStreakCount);
+        currentStreakCount = 0;
       }
+    }
+    streaks.push(currentStreakCount);
+    longestStreakCount = Math.max(...streaks);
+    currentStreakCount = streaks[streaks.length - 1];
 
-      // Calculate average reading time
-      if (readingTimes.length > 0) {
-        let totalReadingTime = readingTimes.reduce(
-          (sum, time) => sum + time,
-          0
-        );
-        setAverageReadingTime(totalReadingTime / readingTimes.length);
+    // Calculate verses per day
+    let totalDays =
+      moment(readingResponseItem[0].time_stamp).diff(
+        moment(readingResponseItem[readingResponseItem.length - 1].time_stamp),
+        'days'
+      ) + 1;
+    versesPerDayCount = totalVersesRead / totalDays;
+
+    setOldGraphData(readVersusList);
+    setGraphHistory(graphHistory);
+    setListHistory(listHistory);
+    setListHistoryVerse(readVersusList);
+    setLongestStreak(longestStreakCount);
+    setCurrentStreak(currentStreakCount);
+    setVersesPerDay(versesPerDayCount);
+
+    console.log('🚀 ~ versesPerDayCount:', versesPerDayCount);
+    console.log('🚀 ~ currentStreakCount:', currentStreakCount);
+    console.log('🚀 ~ longestStreakCount:', longestStreakCount);
+    console.log('🚀 ~ streaks:', streaks);
+
+    let total = 0;
+    if (latestReadingItem.current_surah != 0) {
+      for (let i = 0; i <= latestReadingItem.current_surah - 2; i++) {
+        total = total + list[i].total_verses;
       }
+      setTotalVersesRead(total + latestReadingItem.current_aayah);
+    } else {
+      setTotalVersesRead(latestReadingItem.current_aayah);
     }
   }, [props.list]);
 
@@ -237,30 +226,7 @@ export default function Statistics(props) {
               </TableCell>
               <TableCell align="right">{totalVersesRead}</TableCell>
             </TableRow>
-            <TableRow
-              key={4}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Percentage of Quran Completed
-              </TableCell>
-              <TableCell align="right">
-                {((totalVersesRead / totalVerses) * 100).toFixed(2)}%
-              </TableCell>
-            </TableRow>
-            <TableRow
-              key={5}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Average Reading Time per Session
-              </TableCell>
-              <TableCell align="right">
-                {averageReadingTime
-                  ? averageReadingTime.toFixed(2) + ' minutes'
-                  : 'N/A'}
-              </TableCell>
-            </TableRow>
+
             <TableRow
               key={6}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
