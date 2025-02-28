@@ -101,12 +101,12 @@ export default function App() {
         >
           <Typography variant="subtitle1">
             {formatNumber(totalVersesRead)} verses completed (
-            {formatNumber(100 - percentage)}%)
+            {formatNumber(percentage)}%)
           </Typography>
 
           <Typography variant="subtitle1">
-            {formatNumber(totalVerses - totalVersesRead)} verses left{' '}
-            {formatNumber(percentage)}%
+            {formatNumber(totalVerses - totalVersesRead)} verses left (
+            {formatNumber(100 - percentage)}%)
           </Typography>
         </Box>
 

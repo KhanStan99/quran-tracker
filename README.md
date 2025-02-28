@@ -42,3 +42,8 @@ Live at: https://quran-read-tracker.web.app/
 #### 1.1.1: 22nd Feb 2025
 
 - Enhanced the UI of tracker page.
+
+#### 1.1.2: 28th Feb 2025
+
+- Fixed minor issues.
+- Improved table layout.

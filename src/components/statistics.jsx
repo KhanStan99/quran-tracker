@@ -6,8 +6,8 @@ import quran from '../assets/quran.json';
 import UserContext from './UserContext';
 import moment from 'moment';
 import {
-  Button,
   Grid2,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -28,9 +28,6 @@ export default function Statistics(props) {
   const [listHistoryVerse, setListHistoryVerse] = useState([]);
   const [totalVersesRead, setTotalVersesRead] = useState(0);
   const [avgFormula, setAvgFormula] = useState(0);
-  const [longestStreak, setLongestStreak] = useState(0);
-  const [currentStreak, setCurrentStreak] = useState(0);
-  const [versesPerDay, setVersesPerDay] = useState(0);
   const [list] = useState(quran);
   const totalVerses = 6236;
   const countFrom = 7;
@@ -52,8 +49,11 @@ export default function Statistics(props) {
       readVersusList.push(bush.aayah_total);
     });
     readingResponseItem.forEach((bush) => {
-      graphHistory.push(moment(bush.time_stamp).format('DD/MM'));
-      listHistory.push(moment(bush.time_stamp).format('DD/MM/YY - hh:mm a'));
+      graphHistory.push(moment(bush.time_stamp).format('DD MMM'));
+      listHistory.push(
+        moment(bush.time_stamp).format(`DD MMM YYYY ☼ hh:mm a`) +
+          (moment(bush.time_stamp).format('a') === 'am' ? ' ☽' : ' ☀︎')
+      );
     });
 
     // Calculate reading times
@@ -93,14 +93,6 @@ export default function Statistics(props) {
     setGraphHistory(graphHistory);
     setListHistory(listHistory);
     setListHistoryVerse(readVersusList);
-    setLongestStreak(longestStreakCount);
-    setCurrentStreak(currentStreakCount);
-    setVersesPerDay(versesPerDayCount);
-
-    console.log('🚀 ~ versesPerDayCount:', versesPerDayCount);
-    console.log('🚀 ~ currentStreakCount:', currentStreakCount);
-    console.log('🚀 ~ longestStreakCount:', longestStreakCount);
-    console.log('🚀 ~ streaks:', streaks);
 
     let total = 0;
     if (latestReadingItem.current_surah != 0) {
@@ -201,7 +193,7 @@ export default function Statistics(props) {
                 sessions)
               </TableCell>
               <TableCell align="right">
-                {avgFormula ? avgFormula.toFixed(2) + ' Verses' : 'N/A'}
+                {avgFormula ? avgFormula.toFixed(0) + ' Verses' : 'N/A'}
               </TableCell>
             </TableRow>
             <TableRow
@@ -217,45 +209,6 @@ export default function Statistics(props) {
                   : 'N/A'}
               </TableCell>
             </TableRow>
-            <TableRow
-              key={3}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Total Verses Read
-              </TableCell>
-              <TableCell align="right">{totalVersesRead}</TableCell>
-            </TableRow>
-
-            <TableRow
-              key={6}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Longest Streak of Daily Reading
-              </TableCell>
-              <TableCell align="right">{longestStreak} days</TableCell>
-            </TableRow>
-            <TableRow
-              key={7}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Current Streak of Daily Reading
-              </TableCell>
-              <TableCell align="right">{currentStreak} days</TableCell>
-            </TableRow>
-            <TableRow
-              key={8}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Verses Read per Day
-              </TableCell>
-              <TableCell align="right">
-                {versesPerDay ? versesPerDay.toFixed(2) + ' Verses' : 'N/A'}
-              </TableCell>
-            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -265,7 +218,7 @@ export default function Statistics(props) {
           <TableHead>
             <TableRow>
               <TableCell>Entry</TableCell>
-              <TableCell align="right">No. of Aayahs</TableCell>
+              <TableCell align="left">No. of Aayahs</TableCell>
             </TableRow>
           </TableHead>
 
@@ -287,17 +240,13 @@ export default function Statistics(props) {
                       alignItems={'center'}
                     >
                       <Typography variant="body1">
-                        {listHistoryVerse[index]}{' '}
+                        {listHistoryVerse[index]}
                       </Typography>
 
                       {index === 0 && (
-                        <Button
-                          variant="contained"
-                          onClick={deleteClicked}
-                          startIcon={<DeleteForever />}
-                        >
-                          Delete
-                        </Button>
+                        <IconButton onClick={deleteClicked} color="secondary">
+                          <DeleteForever />
+                        </IconButton>
                       )}
                     </Grid2>
                   </TableCell>
